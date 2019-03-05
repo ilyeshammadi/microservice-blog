@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+service Service {
+    rpc List(Filters) returns (Users) {}
+    rpc Get(GetRequest) returns (User) {}
+    rpc Create (CreateRequest) returns (CreateResponse);
+}
+
+message Empty {}
+
+message User {
+    string id = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message Users {
+    repeated User users = 1;
+}
+
+message Filters {
+    string username = 1;
+    string password = 2;
+}
+
+message GetRequest {
+    string id = 1;
+}
+
+message CreateRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message CreateResponse {
+    User user = 1;
+}

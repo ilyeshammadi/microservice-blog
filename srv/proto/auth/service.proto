@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+service Service {
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc GetUser(GetUserRequest) returns (User) {}
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string token = 1;
+}
+
+message GetUserRequest {
+    string token = 1;
+}
+
+message User {
+    string id = 1;
+    string username = 2;
+}
