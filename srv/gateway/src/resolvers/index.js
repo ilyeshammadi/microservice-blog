@@ -21,6 +21,7 @@ module.exports = {
     },
     Query: {
         user: (_, args) => users.get(args),
+        users: () => users.list(),
         articles: () => articles.list(),
         article: (_, args) => articles.get(args),
         comments: () => comments.list(),

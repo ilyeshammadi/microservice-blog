@@ -1,6 +1,17 @@
 const { ApolloError } = require('apollo-server')
 const services = require('../utils/services')
 
+async function list(filters = {}) {
+    const usersServiceClient = services.getUsersServiceClient();
+    const result = await new Promise((reslove, reject) => {
+        usersServiceClient.list(filters, (err, res) => {
+            if (err) reject(err)
+            reslove(res);
+        });
+    })
+    return result.users;
+}
+
 async function create({ username, password }) {
     const usersServiceClient = services.getUsersServiceClient();
     const createRequest = { username, password };
@@ -30,6 +41,7 @@ async function get({ id }) {
 
 
 module.exports = {
+    list,
     create,
     get,
 }

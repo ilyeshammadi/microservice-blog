@@ -54,6 +54,7 @@ module.exports = gql`
 
   type Query {
     user(id: ID!): User
+    users: [User]
     article(id: ID!): Article
     articles: [Article]
     comment(id: ID!): Comment

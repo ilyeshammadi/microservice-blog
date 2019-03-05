@@ -29,10 +29,25 @@ async function create(article) {
     })
 }
 
+async function update(article) {
+    const query = { _id: article.id }
+    delete article.id;
+    await Article.findOneAndUpdate(query, article);
+    return await Article.findOne(query)
+
+}
+
+async function remove({ id }) {
+    const query = { _id: id }
+    const article = await Article.findOne(query);
+    article.remove();
+}
+
 module.exports = {
     list,
     get,
     create,
-
+    update,
+    remove
 }
 
