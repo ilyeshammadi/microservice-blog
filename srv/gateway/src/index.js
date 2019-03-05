@@ -1,4 +1,4 @@
-const { ApolloServer, AuthenticationError } = require('apollo-server');
+const { ApolloServer } = require('apollo-server');
 const resolvers = require('./resolvers');
 const typeDefs = require('./typeDefs');
 const { getUser } = require('./resolvers/auth');
