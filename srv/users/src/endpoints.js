@@ -1,8 +1,16 @@
 const grpc = require('grpc');
+const { each } = require('lodash');
 const handlers = require('./handlers');
 
-function list(call, callback) {
-    handlers.list(call.request).then((response) => callback(null, response));
+function list(call) {
+    handlers.list(call.request).then(({ users }) => {
+        each(users, user => {
+            call.write(user);
+        })
+        call.end()
+    }).catch(err => {
+        throw err
+    });
 }
 
 function get(call, callback) {

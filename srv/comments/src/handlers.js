@@ -1,10 +1,10 @@
 const { Comment } = require('./models')
 
-async function list(filters) {
+async function list({ query, paginator }) {
     return await new Promise((resolve, reject) => {
-        Comment.find(filters, (err, comments) => {
+        Comment.paginate(query, paginator, (err, result) => {
             if (err) reject(err)
-            resolve({ comments })
+            resolve({ comments: result.docs })
         })
     })
 }

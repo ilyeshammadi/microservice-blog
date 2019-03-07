@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service Service {
-    rpc List(Filters) returns (Comments) {}
+    rpc List(ListRequest) returns (stream Comment) {}
     rpc Get(GetRequest) returns (Comment) {}
     rpc Create (CreateRequest) returns (Comment) {};
 }
@@ -32,4 +32,19 @@ message CreateRequest {
     string content = 1;
     string authorId = 2;
     string articleId = 3;
+}
+
+message Query {
+    string authorId = 1;
+    string articleId = 2;
+}
+
+message Paginator {
+    int32 page = 1 [default = 1];
+    int32 limit = 2 [default = 10];
+}
+
+message ListRequest {
+    Query query = 1 ;
+    Paginator paginator = 2;
 }

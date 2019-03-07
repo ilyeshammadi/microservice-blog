@@ -13,19 +13,20 @@ module.exports = {
     },
     Article: {
         author: ({ authorId }) => users.get({ id: authorId }),
-        comments: ({ id }) => comments.list({ articleId: id }),
+        comments: ({ id }, { paginator }) => comments.list({ query: { articleId: id }, paginator }),
     },
     User: {
-        articles: ({ id }) => articles.list({ authorId: id }),
-        comments: ({ id }) => comments.list({ authorId: id }),
+        articles: ({ id }, { paginator }) => articles.list({ query: { authorId: id }, paginator }),
+        comments: ({ id }, { paginator }) => comments.list({ query: { authorId: id }, paginator }),
     },
     Query: {
         user: (_, args) => users.get(args),
-        users: () => users.list(),
-        articles: () => articles.list(),
         article: (_, args) => articles.get(args),
-        comments: () => comments.list(),
         comment: (_, args) => comments.get(args),
+        users: (_, { paginator }) => users.list({ query: {}, paginator }),
+        articles: (_, { paginator }) => articles.list({ query: {}, paginator }),
+        comments: (_, { paginator }) => comments.list({ query: {}, paginator }),
+
     },
     Mutation: {
         login: (_, { loginInput }) => auth.login(loginInput),

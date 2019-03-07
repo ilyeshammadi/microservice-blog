@@ -1,7 +1,7 @@
 # Microservices Blog
 A microservices application example
 
-## Technology used
+## Technologies used
 - Node.js
 - gRPC
 - GraphQL

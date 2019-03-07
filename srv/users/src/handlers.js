@@ -1,10 +1,10 @@
 const { User } = require('./models')
 
-async function list(filters) {
+async function list({ query, paginator }) {
     return await new Promise((resolve, reject) => {
-        User.find(filters, (err, users) => {
-            if (err) reject(err);
-            resolve({ users })
+        User.paginate(query, paginator, (err, result) => {
+            if (err) reject(err)
+            resolve({ users: result.docs })
         })
     })
 }

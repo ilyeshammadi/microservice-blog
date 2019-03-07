@@ -6,18 +6,12 @@ async function login(request) {
     if (!request.username || !request.password) return null;
 
     const usersServiceClient = utils.getUsersServiceClient();
+    const call = usersServiceClient.list(request)
     const user = await new Promise((resolve, reject) => {
-        usersServiceClient.list(request, (err, res) => {
-            if (err) {
-                if (err.code === 404) {
-                    resolve(null)
-                } else {
-                    reject(err);
-                }
-            }
-
-            resolve(first(res.users));
+        call.on('data', user => {
+            resolve(user)
         })
+        call.on('error', err => reject(err));
     })
     if (user) {
         const token = await new Promise(async (resolve, reject) => {

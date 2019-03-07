@@ -1,26 +1,15 @@
 syntax = "proto3";
 
 service Service {
-    rpc List(Filters) returns (Users) {}
+    rpc List(ListRequest) returns (stream User) {}
     rpc Get(GetRequest) returns (User) {}
     rpc Create (CreateRequest) returns (CreateResponse);
 }
-
-message Empty {}
 
 message User {
     string id = 1;
     string username = 2;
     string password = 3;
-}
-
-message Users {
-    repeated User users = 1;
-}
-
-message Filters {
-    string username = 1;
-    string password = 2;
 }
 
 message GetRequest {
@@ -34,4 +23,19 @@ message CreateRequest {
 
 message CreateResponse {
     User user = 1;
+}
+
+message Query {
+    string username = 1;
+    string password = 2;
+}
+
+message Paginator {
+    int32 page = 1 [default = 1];
+    int32 limit = 2 [default = 10];
+}
+
+message ListRequest {
+    Query query = 1 ;
+    Paginator paginator = 2;
 }

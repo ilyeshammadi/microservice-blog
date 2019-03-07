@@ -4,8 +4,8 @@ module.exports = gql`
   type User {
     id: ID!
     username: String
-    articles: [Article]
-    comments: [Comment]
+    articles(paginator: Paginator): [Article]
+    comments(paginator: Paginator): [Comment]
   }
 
   type Article {
@@ -14,7 +14,7 @@ module.exports = gql`
     content: String
     authorId: String
     author: User!
-    comments: [Comment]
+    comments(paginator: Paginator): [Comment]
   }
 
   type Comment {
@@ -26,6 +26,10 @@ module.exports = gql`
     article: Article
   }
 
+  input Paginator {
+    page: Int
+    limit: Int
+  }
   
   input LoginInput {
     username: String!
@@ -54,11 +58,11 @@ module.exports = gql`
 
   type Query {
     user(id: ID!): User
-    users: [User]
+    users(paginator: Paginator): [User]
     article(id: ID!): Article
-    articles: [Article]
+    articles(paginator: Paginator): [Article]
     comment(id: ID!): Comment
-    comments: [Comment]
+    comments(paginator: Paginator): [Comment]
   }
 
   type Mutation {

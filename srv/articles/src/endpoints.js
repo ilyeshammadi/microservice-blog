@@ -1,8 +1,16 @@
 const handlers = require('./handlers');
+const { each } = require('lodash');
 
-
-function list(call, callback) {
-    handlers.list(call.request).then((response) => callback(null, response));
+function list(call) {
+    handlers.list(call.request)
+        .then(({ articles }) => {
+            each(articles, article => {
+                call.write(article);
+            })
+            call.end();
+        }).catch(err => {
+            throw error(err)
+        });
 }
 
 function get(call, callback) {

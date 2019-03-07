@@ -1,14 +1,20 @@
 const services = require('../utils/services')
 
-async function list(filters = {}) {
+async function list(request) {
     const commentsServiceClient = services.getCommentsServiceClient();
-    const result = await new Promise((reslove, reject) => {
-        commentsServiceClient.list(filters, (err, res) => {
-            if (err) reject(err)
-            reslove(res);
+    const call = commentsServiceClient.list(request);
+    const comments = await new Promise((resolve, reject) => {
+        const comments = []
+        call.on('data', comment => {
+            comments.push(comment);
+        })
+        call.on('end', () => {
+            resolve(comments);
         });
+        call.on('error', err => reject(err));
     })
-    return result.comments ? result.comments : [];
+    return comments ? comments : [];
+
 }
 
 async function get({ id }) {

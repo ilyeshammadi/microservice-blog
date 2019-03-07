@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service Service {
-    rpc List(Filters) returns (Articles) {}
+    rpc List(ListRequest) returns (stream Article) {}
     rpc Get(GetRequest) returns (Article) {}
     rpc Create (CreateRequest) returns (Article) {};
     rpc Update(UpdateRequest) returns (Article) {};
@@ -42,6 +42,16 @@ message RemoveRequest {
     string id = 1;
 }
 
-message Filters {
-    string authorId = 3;
+message Query {
+    string authorId = 1;
+}
+
+message Paginator {
+    int32 page = 1 [default = 1];
+    int32 limit = 2 [default = 10];
+}
+
+message ListRequest {
+    Query query = 1 ;
+    Paginator paginator = 2;
 }

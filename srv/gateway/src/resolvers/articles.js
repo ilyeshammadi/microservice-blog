@@ -1,14 +1,19 @@
 const services = require('../utils/services')
 
-async function list(filters = {}) {
+async function list(request) {
     const articlesServiceClient = services.getArticlesServiceClient();
-    const result = await new Promise((reslove, reject) => {
-        articlesServiceClient.list(filters, (err, res) => {
-            if (err) reject(err)
-            reslove(res);
+    const call = articlesServiceClient.list(request);
+    const articles = await new Promise((resolve, reject) => {
+        const articles = []
+        call.on('data', article => {
+            articles.push(article);
+        })
+        call.on('end', () => {
+            resolve(articles);
         });
+        call.on('error', err => reject(err));
     })
-    return result.articles;
+    return articles;
 }
 
 async function get({ id }) {
