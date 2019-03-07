@@ -2,7 +2,6 @@ const { ApolloError } = require('apollo-server')
 const services = require('../utils/services')
 
 async function list(request) {
-    console.log(request)
     const usersServiceClient = services.getUsersServiceClient();
     const call = usersServiceClient.list(request)
     return await new Promise((resolve, reject) => {
