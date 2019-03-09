@@ -1,0 +1,19 @@
+{
+	"name": "blogo",
+	"description": "A microservices application example",
+	"scripts": {
+		"compose:dev": "docker-compose -f deploy/docker-compose/dev.yaml up --build",
+		"compose:prod": "docker-compose -f deploy/docker-compose/prod.yaml up --build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Ilyes-Hammadi/blogo.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Ilyes-Hammadi/blogo/issues"
+	},
+	"homepage": "https://github.com/Ilyes-Hammadi/blogo#readme"
+}

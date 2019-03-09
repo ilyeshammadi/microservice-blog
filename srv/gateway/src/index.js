@@ -14,7 +14,7 @@ const server = new ApolloServer({
     const user = await getUser(token);
 
     return { user };
-  },
+  }
 });
 
 server.listen().then(({ url }) => {

@@ -1,0 +1,45 @@
+version: "3"
+
+# Volumes
+volumes:
+  mongodb:
+
+# Services
+services:
+  gateway:
+    build: ../../srv/gateway
+    volumes:
+      - ../../srv/proto:/usr/src/app/proto
+    ports:
+      - "4000:4000"
+    depends_on:
+      - auth
+      - articles
+      - users
+
+  auth:
+    build: ../../srv/auth
+    volumes:
+      - ../../srv/proto:/usr/src/app/proto
+    depends_on:
+      - users
+
+  users:
+    build: ../../srv/users
+    volumes:
+      - ../../srv/proto:/usr/src/app/proto
+
+  articles:
+    build: ../../srv/articles
+    volumes:
+      - ../../srv/proto:/usr/src/app/proto
+
+  comments:
+    build: ../../srv/comments
+    volumes:
+      - ../../srv/proto:/usr/src/app/proto
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
