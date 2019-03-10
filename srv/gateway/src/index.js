@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server');
+const logger = require('./utils/logger')
 const resolvers = require('./resolvers');
 const typeDefs = require('./typeDefs');
 const { getUser } = require('./resolvers/auth');
@@ -18,5 +19,5 @@ const server = new ApolloServer({
 });
 
 server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+  logger.info(`🚀  Server ready at ${url}`);
 });

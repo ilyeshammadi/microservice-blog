@@ -8,7 +8,8 @@
 		"@grpc/proto-loader": "^0.4.0",
 		"grpc": "^1.18.0",
 		"lodash": "^4.17.11",
-		"mongoose": "^5.4.16"
+		"mongoose": "^5.4.16",
+		"winston": "^3.2.1"
 	},
 	"devDependencies": {
 		"nodemon": "^1.18.10"

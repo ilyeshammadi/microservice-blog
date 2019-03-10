@@ -31,6 +31,7 @@ services:
       - "50050:50050"
     depends_on:
       - users
+      - mongo
 
   users:
     build:
@@ -41,6 +42,8 @@ services:
       - ../../srv/users/src:/usr/src/app/srv/src
     ports:
       - "50051:50050"
+    depends_on:
+      - mongo
 
   articles:
     build:
@@ -51,6 +54,8 @@ services:
       - ../../srv/articles/src:/usr/src/app/srv/src
     ports:
       - "50052:50050"
+    depends_on:
+      - mongo
 
   comments:
     build:
@@ -61,6 +66,8 @@ services:
       - ../../srv/comments/src:/usr/src/app/srv/src
     ports:
       - "50053:50050"
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo

@@ -1,5 +1,6 @@
 FROM node:10
 WORKDIR /usr/src/app/srv
+ENV NODE_ENV=development
 COPY package*.json ./
 RUN npm install
 COPY . .

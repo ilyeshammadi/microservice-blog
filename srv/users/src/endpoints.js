@@ -1,8 +1,17 @@
 const grpc = require('grpc');
 const { each } = require('lodash');
+
+const logger = require('./utils/logger');
 const handlers = require('./handlers');
 
 function list(call) {
+    logger.info({
+        message: "Getting a list of users",
+        payload: {
+            endpoint: 'List',
+            args: call.request
+        }
+    })
     handlers.list(call.request).then(({ users }) => {
         each(users, user => {
             call.write(user);
@@ -14,11 +23,24 @@ function list(call) {
 }
 
 function get(call, callback) {
+    logger.info({
+        message: "Getting one user",
+        payload: {
+            endpoint: 'Get',
+            args: call.request
+        }
+    })
     const id = call.request.id;
     handlers.get(id).then((res => callback(null, res)))
 }
 
 function create(call, callback) {
+    logger.info({
+        message: "Creating a user",
+        payload: {
+            endpoint: 'Create'
+        }
+    })
     const username = call.request.username;
     const password = call.request.password;
     handlers.create(username, password).then(res => {

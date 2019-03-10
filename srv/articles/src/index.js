@@ -1,6 +1,8 @@
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
 const service = require('./endpoints.js')
+const logger = require('./utils/logger')
+
 const PROTO_PATH = '../proto/articles/service.proto';
 
 const serviceDefinition = protoLoader.loadSync(PROTO_PATH);
@@ -13,5 +15,5 @@ const SERVICE_ADDRESS = `${SERVICE_HOST}:${SERVICE_PORT}`;
 
 server.addProtoService(serviceProto.Service.service, service)
 server.bind(SERVICE_ADDRESS, grpc.ServerCredentials.createInsecure())
-console.log(`Server running at ${SERVICE_ADDRESS}`)
+logger.info(`🥑 gRPC server running at ${SERVICE_ADDRESS}`)
 server.start()
