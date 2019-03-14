@@ -32,5 +32,6 @@ module.exports = {
         login: (_, { loginInput }) => auth.login(loginInput),
         register: (_, { registerInput }) => users.create(registerInput),
         createArticle: (_, { createArticleInput }, context) => authenticate(context, () => articles.create({ authorId: context.user.id, ...createArticleInput })),
+        updateArticle: (_, { updateArticleInput }, context) => authenticate(context, () => articles.update({ authorId: context.user.id, ...updateArticleInput }))
     }
 }

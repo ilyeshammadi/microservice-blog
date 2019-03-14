@@ -56,6 +56,12 @@ module.exports = gql`
     content: String!
   }
 
+  input UpdateArticleInput {
+    id: ID!
+    title: String
+    content: String
+  }
+
   type Query {
     user(id: ID!): User
     users(paginator: Paginator): [User]
@@ -69,6 +75,7 @@ module.exports = gql`
     login(loginInput: LoginInput!): LoginResponse
     register(registerInput: RegisterInput!): RegisterResponse
     createArticle(createArticleInput: CreateArticleInput!): Article
+    updateArticle(updateArticleInput: UpdateArticleInput!): Article
   }
 
 `; 

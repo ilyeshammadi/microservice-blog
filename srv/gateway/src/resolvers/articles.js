@@ -38,8 +38,21 @@ async function create(request) {
     return result;
 }
 
+
+async function update(request) {
+    const articlesServiceClient = services.getArticlesServiceClient();
+    const result = await new Promise((reslove, reject) => {
+        articlesServiceClient.update(request, (err, res) => {
+            if (err) reject(err)
+            reslove(res);
+        });
+    })
+    return result;
+}
+
 module.exports = {
     list,
     get,
     create,
+    update
 }
