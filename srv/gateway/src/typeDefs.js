@@ -46,6 +46,19 @@ module.exports = gql`
   }
 
 
+  type CreateArticleResponse {
+    article: Article
+  }
+
+  type UpdateArticleResponse {
+    article: Article
+  }
+
+  type DeleteArticleResponse {
+    article: Article
+    ok: Boolean!
+  }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -62,6 +75,10 @@ module.exports = gql`
     content: String
   }
 
+  input DeleteArticleInput {
+    id: ID!
+  }
+
   type Query {
     user(id: ID!): User
     users(paginator: Paginator): [User]
@@ -74,8 +91,9 @@ module.exports = gql`
   type Mutation {
     login(loginInput: LoginInput!): LoginResponse
     register(registerInput: RegisterInput!): RegisterResponse
-    createArticle(createArticleInput: CreateArticleInput!): Article
-    updateArticle(updateArticleInput: UpdateArticleInput!): Article
+    createArticle(createArticleInput: CreateArticleInput!): CreateArticleResponse
+    updateArticle(updateArticleInput: UpdateArticleInput!): UpdateArticleResponse
+    deleteArticle(deleteArticleInput: DeleteArticleInput!): DeleteArticleResponse
   }
 
 `; 

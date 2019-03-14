@@ -50,9 +50,21 @@ async function update(request) {
     return result;
 }
 
+async function remove(request) {
+    const articlesServiceClient = services.getArticlesServiceClient();
+    const result = await new Promise((reslove, reject) => {
+        articlesServiceClient.remove(request, (err, res) => {
+            if (err) reject(err)
+            reslove(res);
+        });
+    })
+    return result;
+}
+
 module.exports = {
     list,
     get,
     create,
-    update
+    update,
+    remove,
 }

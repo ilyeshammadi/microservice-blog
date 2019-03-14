@@ -3,8 +3,8 @@ syntax = "proto3";
 service Service {
     rpc List(ListRequest) returns (stream Article) {}
     rpc Get(GetRequest) returns (Article) {}
-    rpc Create (CreateRequest) returns (Article) {};
-    rpc Update(UpdateRequest) returns (Article) {};
+    rpc Create (CreateRequest) returns (CreateReponse) {};
+    rpc Update(UpdateRequest) returns (UpdateResponse) {};
     rpc Remove(RemoveRequest) returns (RemoveResponse) {};
 }
 
@@ -25,6 +25,10 @@ message CreateRequest {
     required string authorId = 3;
 }
 
+message CreateReponse {
+    required Article article = 1;
+}
+
 message UpdateRequest {
     required string id = 1;
     string title = 2;
@@ -32,12 +36,17 @@ message UpdateRequest {
     string authorId = 4;
 }
 
+message UpdateResponse {
+    required Article article = 1;
+}
+
 message RemoveRequest {
     required string id = 1;
 }
 
 message RemoveResponse {
-    bool ok = 1;
+    Article article = 1;
+    required bool ok = 2 [ default = false ];
 }
 
 message Query {

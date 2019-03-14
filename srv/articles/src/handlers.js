@@ -1,3 +1,4 @@
+const logger = require('./utils/logger');
 const { Article } = require('./models')
 
 async function list({ query, paginator }) {
@@ -24,7 +25,7 @@ async function create(article) {
     return await new Promise((resolve, reject) => {
         articleModel.save((err, articleCreated) => {
             if (err) reject(err)
-            resolve(articleCreated)
+            resolve({ article: articleCreated })
         })
     })
 }
@@ -33,14 +34,28 @@ async function update(article) {
     const query = { _id: article.id }
     delete article.id;
     await Article.findOneAndUpdate(query, article);
-    return await Article.findOne(query)
+    const articleUpdated = await Article.findOne(query)
+    return { article: articleUpdated };
 
 }
 
 async function remove({ id }) {
-    const query = { _id: id }
-    const article = await Article.findOne(query);
-    article.remove();
+    try {
+        const query = { _id: id }
+        const article = await Article.findOne(query);
+        article.remove();
+        return {
+            article,
+            ok: true
+        }
+    } catch (error) {
+        logger.error("Can not remove user, user not found")
+        return {
+            article: null,
+            ok: false
+        }
+    }
+
 }
 
 module.exports = {
