@@ -5,7 +5,7 @@ async function list({ query, paginator }) {
     return await new Promise((resolve, reject) => {
         Article.paginate(query, paginator, (err, result) => {
             if (err) reject(err)
-            resolve({ articles: result.docs })
+            resolve(result.docs)
         })
     })
 }
@@ -40,22 +40,13 @@ async function update(article) {
 }
 
 async function remove({ id }) {
-    try {
-        const query = { _id: id }
-        const article = await Article.findOne(query);
-        article.remove();
-        return {
-            article,
-            ok: true
-        }
-    } catch (error) {
-        logger.error("Can not remove user, user not found")
-        return {
-            article: null,
-            ok: false
-        }
+    const query = { _id: id }
+    const article = await Article.findOne(query);
+    article.remove();
+    return {
+        article,
+        ok: true
     }
-
 }
 
 module.exports = {
