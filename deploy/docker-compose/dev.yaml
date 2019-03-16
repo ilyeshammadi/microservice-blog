@@ -8,11 +8,14 @@ volumes:
 services:
   gateway:
     build:
-      context: ../../srv/gateway
-      dockerfile: Dockerfile.dev
+      context: ../../src
+      dockerfile: services/gateway/Dockerfile.dev
+      args:
+        SERVICE: gateway
     volumes:
-      - ../../srv/proto:/usr/src/app/proto
-      - ../../srv/gateway/src:/usr/src/app/srv/src
+      - ../../src/proto:/src/proto
+      - ../../src/common:/src/services/gateway/common
+      - ../../src/services/gateway/src:/src/services/gateway/src
     ports:
       - "4000:4000"
     depends_on:
@@ -22,11 +25,14 @@ services:
 
   auth:
     build:
-      context: ../../srv/auth
-      dockerfile: Dockerfile.dev
+      context: ../../src
+      dockerfile: services/auth/Dockerfile.dev
+      args:
+        SERVICE: auth
     volumes:
-      - ../../srv/proto:/usr/src/app/proto
-      - ../../srv/auth/src:/usr/src/app/srv/src
+      - ../../src/proto:/src/proto
+      - ../../src/common:/src/services/auth/common
+      - ../../src/services/auth/src:/src/services/auth/src
     ports:
       - "50050:50050"
     depends_on:
@@ -35,11 +41,14 @@ services:
 
   users:
     build:
-      context: ../../srv/users
-      dockerfile: Dockerfile.dev
+      context: ../../src
+      dockerfile: services/users/Dockerfile.dev
+      args:
+        SERVICE: users
     volumes:
-      - ../../srv/proto:/usr/src/app/proto
-      - ../../srv/users/src:/usr/src/app/srv/src
+      - ../../src/proto:/src/proto
+      - ../../src/common:/src/services/users/common
+      - ../../src/services/users/src:/src/services/users/src
     ports:
       - "50051:50050"
     depends_on:
@@ -47,11 +56,14 @@ services:
 
   articles:
     build:
-      context: ../../srv/articles
-      dockerfile: Dockerfile.dev
+      context: ../../src
+      dockerfile: services/articles/Dockerfile.dev
+      args:
+        SERVICE: articles
     volumes:
-      - ../../srv/proto:/usr/src/app/proto
-      - ../../srv/articles/src:/usr/src/app/srv/src
+      - ../../src/proto:/src/proto
+      - ../../src/common:/src/services/articles/common
+      - ../../src/services/articles/src:/src/services/articles/src
     ports:
       - "50052:50050"
     depends_on:
@@ -59,11 +71,14 @@ services:
 
   comments:
     build:
-      context: ../../srv/comments
-      dockerfile: Dockerfile.dev
+      context: ../../src
+      dockerfile: services/comments/Dockerfile.dev
+      args:
+        SERVICE: comments
     volumes:
-      - ../../srv/proto:/usr/src/app/proto
-      - ../../srv/comments/src:/usr/src/app/srv/src
+      - ../../src/proto:/src/proto
+      - ../../src/common:/src/services/comments/common
+      - ../../src/services/comments/src:/src/services/comments/src
     ports:
       - "50053:50050"
     depends_on:
