@@ -13,7 +13,6 @@ services:
       args:
         SERVICE: gateway
     volumes:
-      - ../../src/proto:/src/proto
       - ../../src/common:/src/services/gateway/common
       - ../../src/services/gateway/src:/src/services/gateway/src
     ports:
@@ -30,7 +29,6 @@ services:
       args:
         SERVICE: auth
     volumes:
-      - ../../src/proto:/src/proto
       - ../../src/common:/src/services/auth/common
       - ../../src/services/auth/src:/src/services/auth/src
     ports:
@@ -46,7 +44,6 @@ services:
       args:
         SERVICE: users
     volumes:
-      - ../../src/proto:/src/proto
       - ../../src/common:/src/services/users/common
       - ../../src/services/users/src:/src/services/users/src
     ports:
@@ -61,7 +58,6 @@ services:
       args:
         SERVICE: articles
     volumes:
-      - ../../src/proto:/src/proto
       - ../../src/common:/src/services/articles/common
       - ../../src/services/articles/src:/src/services/articles/src
     ports:
@@ -76,7 +72,6 @@ services:
       args:
         SERVICE: comments
     volumes:
-      - ../../src/proto:/src/proto
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
     ports:

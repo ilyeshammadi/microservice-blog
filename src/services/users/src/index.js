@@ -3,7 +3,7 @@ const protoLoader = require('@grpc/proto-loader');
 const service = require('./endpoints.js')
 const logger = require('../common/js/logger')
 
-const PROTO_PATH = '../../proto/users/service.proto';
+const PROTO_PATH = './common/proto/users/service.proto';
 
 const serviceDefinition = protoLoader.loadSync(PROTO_PATH);
 var serviceProto = grpc.loadPackageDefinition(serviceDefinition);
