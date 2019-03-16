@@ -1,5 +1,5 @@
 const utils = require('./utils/token')
-const services = require('../common/services')
+const services = require('../common/js/services')
 const { Auth } = require('./models')
 
 async function login(request) {

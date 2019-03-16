@@ -1,7 +1,7 @@
 const grpc = require('grpc');
 const { each } = require('lodash');
 
-const logger = require('../common/logger');
+const logger = require('../common/js/logger');
 const handlers = require('./handlers');
 
 function list(call) {

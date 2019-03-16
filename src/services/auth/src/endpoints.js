@@ -1,5 +1,5 @@
 const grpc = require('grpc');
-const logger = require('../common/logger');
+const logger = require('../common/js/logger');
 
 const handlers = require('./handlers');
 

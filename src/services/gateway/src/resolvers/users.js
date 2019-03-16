@@ -1,5 +1,5 @@
 const { ApolloError } = require('apollo-server')
-const services = require('../../common/services')
+const services = require('../../common/js/services')
 
 async function list(request) {
     const usersServiceClient = services.getUsersServiceClient();

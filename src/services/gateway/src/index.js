@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server');
-const logger = require('../common/logger')
+const logger = require('../common/js/logger')
 const resolvers = require('./resolvers');
 const typeDefs = require('./typeDefs');
 const { getUser } = require('./resolvers/auth');

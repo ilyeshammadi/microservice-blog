@@ -1,4 +1,4 @@
-const services = require('../../common/services')
+const services = require('../../common/js/services')
 
 async function list(request) {
     const commentsServiceClient = services.getCommentsServiceClient();

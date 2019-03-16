@@ -1,4 +1,4 @@
-const logger = require('../common/logger');
+const logger = require('../common/js/logger');
 const { Article } = require('./models')
 
 async function list({ query, paginator }) {

@@ -1,7 +1,7 @@
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
 const service = require('./endpoints.js')
-const logger = require('../common/logger')
+const logger = require('../common/js/logger')
 
 const PROTO_PATH = '../../proto/users/service.proto';
 
