@@ -91,6 +91,7 @@ services:
       - ../../src/services/comments/src:/src/services/comments/src
     depends_on:
       - mongo
+      - rabbitmq
 
   mongo:
     image: mongo

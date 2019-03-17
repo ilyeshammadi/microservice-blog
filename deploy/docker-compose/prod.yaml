@@ -25,8 +25,6 @@ services:
       dockerfile: services/auth/Dockerfile
       args:
         SERVICE: auth
-    ports:
-      - "50050:50050"
     depends_on:
       - users
       - mongo
@@ -37,8 +35,6 @@ services:
       dockerfile: services/users/Dockerfile
       args:
         SERVICE: users
-    ports:
-      - "50051:50050"
     depends_on:
       - mongo
 
@@ -48,8 +44,6 @@ services:
       dockerfile: services/articles/Dockerfile
       args:
         SERVICE: articles
-    ports:
-      - "50052:50050"
     depends_on:
       - mongo
 
@@ -59,14 +53,24 @@ services:
       dockerfile: services/comments/Dockerfile
       args:
         SERVICE: comments
-    ports:
-      - "50053:50050"
     depends_on:
       - mongo
+
+  comments-subscriber:
+    command: npm run start-subscriber:prod
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile
+      args:
+        SERVICE: comments
+    depends_on:
+      - mongo
+      - rabbitmq
 
   mongo:
     image: mongo
     volumes:
       - mongodb:/data/db
-    ports:
-      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq
