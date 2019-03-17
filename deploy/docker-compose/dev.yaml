@@ -79,6 +79,19 @@ services:
     depends_on:
       - mongo
 
+  comments-subscriber:
+    command: npm run start-subscriber
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile.dev
+      args:
+        SERVICE: comments
+    volumes:
+      - ../../src/common:/src/services/comments/common
+      - ../../src/services/comments/src:/src/services/comments/src
+    depends_on:
+      - mongo
+
   mongo:
     image: mongo
     volumes:

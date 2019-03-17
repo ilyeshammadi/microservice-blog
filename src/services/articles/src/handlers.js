@@ -1,51 +1,153 @@
 const logger = require('../common/js/logger');
+const events = require('../common/js/events')
+const { Broker } = require('../common/js/broker')
+
 const { Article } = require('./models')
 
+const broker = new Broker();
+
 async function list({ query, paginator }) {
-    return await new Promise((resolve, reject) => {
-        Article.paginate(query, paginator, (err, result) => {
-            if (err) reject(err)
-            resolve(result.docs)
+
+    try {
+        // Get the list of articles
+        const { docs } = await Article.paginate(query, paginator);
+
+        logger.info({
+            message: "articles fetched",
+            payload: {
+                args: { query, paginator },
+                endpoint: "list"
+            }
         })
-    })
+
+        return docs;
+    } catch (error) {
+        logger.error({
+            error,
+            message: "invalid arguments",
+            payload: {
+                args: { query, paginator },
+                endpoint: "list"
+            }
+        })
+        return [];
+    }
+
 }
 
 async function get({ id }) {
-    return await new Promise((resolve, reject) => {
-        Article.findOne({ _id: id }, (err, article) => {
-            if (err) reject(err);
-            resolve(article)
+    try {
+        // Get one article
+        const article = await Article.findOne({ _id: id });
+        // Throw error if not found
+        if (!article) throw Error()
+        logger.info({
+            message: "article fetched",
+            payload: {
+                args: { id },
+                endpoint: "get"
+            }
         })
-    })
+        return article;
+    } catch (error) {
+        logger.error({
+            message: "article not found",
+            payload: {
+                args: { id },
+                endpoint: "get"
+            }
+        })
+        throw Error(error)
+    }
+
+
 }
 
 
 async function create(article) {
-    const articleModel = new Article(article);
-    return await new Promise((resolve, reject) => {
-        articleModel.save((err, articleCreated) => {
-            if (err) reject(err)
-            resolve({ article: articleCreated })
+    try {
+        const articleModel = new Article(article);
+        const articleCreated = await articleModel.save();
+        logger.info({
+            message: "article created",
+            payload: {
+                args: article,
+                endpoint: "create"
+            }
         })
-    })
+        return articleCreated;
+    } catch (error) {
+        logger.error({
+            message: "can not create article",
+            payload: {
+                args: article,
+                endpoint: "create"
+            }
+        })
+        throw Error(error);
+    }
+
 }
 
 async function update(article) {
-    const query = { _id: article.id }
-    delete article.id;
-    await Article.findOneAndUpdate(query, article);
-    const articleUpdated = await Article.findOne(query)
-    return { article: articleUpdated };
+    try {
+        const query = { _id: article.id }
+        delete article.id;
+        await Article.findOneAndUpdate(query, article);
+        const articleUpdated = await Article.findOne(query)
 
+        logger.info({
+            message: "article updated",
+            payload: {
+                args: article,
+                endpoint: "update"
+            }
+        })
+
+        return { article: articleUpdated };
+
+    } catch (error) {
+        logger.error({
+            message: "article not found",
+            payload: {
+                args: article,
+                endpoint: "update"
+            }
+        })
+        throw Error(error);
+    }
 }
 
 async function remove({ id }) {
-    const query = { _id: id }
-    const article = await Article.findOne(query);
-    article.remove();
-    return {
-        article,
-        ok: true
+    try {
+        const query = { _id: id }
+        const article = await Article.findOne(query);
+        article.remove();
+
+        // Publish the event
+        broker.publish(events.ARTICLE_DELETED, { id })
+
+        logger.info({
+            message: "article deleted",
+            payload: {
+                args: { id },
+                endpoint: "remove"
+            }
+        })
+
+        return {
+            article,
+            ok: true
+        }
+    } catch (error) {
+        logger.error({
+            message: "article not found",
+            payload: {
+                args: { id },
+                endpoint: "remove"
+            }
+        })
+        throw Error(error);
     }
 }
 

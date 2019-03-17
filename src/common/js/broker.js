@@ -1,17 +1,12 @@
 const amqp = require('amqplib');
 const amqpCallbackAPI = require('amqplib/callback_api');
 
-class Base {
+const logger = require('./logger');
+
+class Broker {
     constructor(args = {}) {
         this.brokerUrl = args.brokerUrl ? args.brokerUrl : 'amqp://rabbitmq';
         this.ex = args.exchange ? args.exchange : 'main';
-    }
-}
-
-class Consumer extends Base {
-    constructor(args = {}) {
-        super(args);
-        this.queue = args.queue ? args.queue : '';
         this.consumers = new Set([]);
     }
 
@@ -19,11 +14,14 @@ class Consumer extends Base {
         this.consumers.add({ topic, callback })
     }
 
-    listen() {
+    subscribe(queue = '') {
+
+        logger.info("🎒 Subscriber waiting for events")
+
         amqpCallbackAPI.connect(this.brokerUrl, (err, conn) => {
             conn.createChannel((err, ch) => {
                 ch.assertExchange(this.ex, 'topic', { durable: false });
-                ch.assertQueue(this.queue, { exclusive: false }, (err, q) => {
+                ch.assertQueue(queue, { exclusive: false }, (err, q) => {
                     // Bind the conusmers to the queue
                     this.consumers.forEach(consumer => ch.bindQueue(q.queue, this.ex, consumer.topic))
                     // Route each message the right consumer
@@ -31,6 +29,13 @@ class Consumer extends Base {
                         this.consumers.forEach(consumer => {
                             if (consumer.topic === msg.fields.routingKey) {
                                 const parsedMessage = JSON.parse(msg.content.toString())
+                                logger.info({
+                                    message: "Event consumed",
+                                    payload: {
+                                        message: parsedMessage,
+                                        topic: msg.fields.routingKey,
+                                    }
+                                })
                                 consumer.callback(parsedMessage);
                                 return;
                             }
@@ -41,10 +46,7 @@ class Consumer extends Base {
             });
         });
     }
-}
 
-
-class Producer extends Base {
     publish(topic, message) {
         amqp.connect(this.brokerUrl).then((c) => {
             c.createConfirmChannel()
@@ -55,6 +57,15 @@ class Producer extends Base {
 
                     // Publish the message
                     const stringifedMessage = JSON.stringify(message)
+
+                    logger.info({
+                        message: "Event published",
+                        payload: {
+                            message,
+                            topic
+                        }
+                    })
+
                     ch.publish(this.ex, topic, new Buffer(stringifedMessage), null, err => {
                         if (err) throw Error(err);
                         c.close();
@@ -65,6 +76,5 @@ class Producer extends Base {
 }
 
 module.exports = {
-    Producer,
-    Consumer,
+    Broker
 }

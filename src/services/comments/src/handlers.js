@@ -28,10 +28,32 @@ async function create(comment) {
     })
 }
 
+
+async function update(comment) {
+    const query = { _id: comment.id }
+    delete comment.id;
+    await Comment.findOneAndUpdate(query, comment);
+    const commentUpdated = await Comment.findOne(query)
+    return { comment: commentUpdated };
+
+}
+
+async function remove({ id }) {
+    const query = { _id: id }
+    const comment = await Comment.findOne(query);
+    comment.remove();
+    return {
+        comment,
+        ok: true
+    }
+}
+
 module.exports = {
     list,
     get,
     create,
+    update,
+    remove,
 
 }
 
