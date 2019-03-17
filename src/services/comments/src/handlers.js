@@ -1,50 +1,167 @@
+const logger = require('../common/js/logger');
 const { Comment } = require('./models')
 
 async function list({ query, paginator }) {
-    return await new Promise((resolve, reject) => {
-        Comment.paginate(query, paginator, (err, result) => {
-            if (err) reject(err)
-            resolve({ comments: result.docs })
+
+    try {
+        // Get the list of comments
+        const { docs } = await Comment.paginate(query, paginator);
+
+        logger.info({
+            message: "comments fetched",
+            payload: {
+                args: { query, paginator },
+                endpoint: "list"
+            }
         })
-    })
+
+        return docs;
+    } catch (error) {
+        logger.error({
+            error,
+            message: "invalid arguments",
+            payload: {
+                args: { query, paginator },
+                endpoint: "list"
+            }
+        })
+        return [];
+    }
+
 }
 
 async function get({ id }) {
-    return await new Promise((resolve, reject) => {
-        Comment.findOne({ _id: id }, (err, comment) => {
-            if (err) reject(err);
-            resolve(comment)
+    try {
+        // Get one comment
+        const comment = await Comment.findOne({ _id: id });
+        // Throw error if not found
+        if (!comment) throw Error()
+        logger.info({
+            message: "comment fetched",
+            payload: {
+                args: { id },
+                endpoint: "get"
+            }
         })
-    })
+        return comment;
+    } catch (error) {
+        logger.error({
+            message: "comment not found",
+            payload: {
+                args: { id },
+                endpoint: "get"
+            }
+        })
+        throw Error(error)
+    }
+
+
 }
+
 
 async function create(comment) {
-    const commentModel = new Comment(comment);
-    return await new Promise((resolve, reject) => {
-        commentModel.save((err, commentCreated) => {
-            if (err) reject(err)
-            resolve(commentCreated)
+    try {
+        const commentModel = new Comment(comment);
+        const commentCreated = await commentModel.save();
+        logger.info({
+            message: "comment created",
+            payload: {
+                args: comment,
+                endpoint: "create"
+            }
         })
-    })
+        return commentCreated;
+    } catch (error) {
+        logger.error({
+            message: "can not create comment",
+            payload: {
+                args: comment,
+                endpoint: "create"
+            }
+        })
+        throw Error(error);
+    }
+
 }
 
-
 async function update(comment) {
-    const query = { _id: comment.id }
-    delete comment.id;
-    await Comment.findOneAndUpdate(query, comment);
-    const commentUpdated = await Comment.findOne(query)
-    return { comment: commentUpdated };
+    try {
+        const query = { _id: comment.id }
+        delete comment.id;
+        await Comment.findOneAndUpdate(query, comment);
+        const commentUpdated = await Comment.findOne(query)
 
+        logger.info({
+            message: "comment updated",
+            payload: {
+                args: comment,
+                endpoint: "update"
+            }
+        })
+
+        return { comment: commentUpdated };
+
+    } catch (error) {
+        logger.error({
+            message: "comment not found",
+            payload: {
+                args: comment,
+                endpoint: "update"
+            }
+        })
+        throw Error(error);
+    }
 }
 
 async function remove({ id }) {
-    const query = { _id: id }
-    const comment = await Comment.findOne(query);
-    comment.remove();
-    return {
-        comment,
-        ok: true
+    try {
+        const query = { _id: id }
+        const comment = await Comment.findOne(query);
+        comment.remove();
+
+        logger.info({
+            message: "comment deleted",
+            payload: {
+                args: { id },
+                endpoint: "remove"
+            }
+        })
+
+        return {
+            comment,
+            ok: true
+        }
+    } catch (error) {
+        logger.error({
+            message: "comment not found",
+            payload: {
+                args: { id },
+                endpoint: "remove"
+            }
+        })
+        throw Error(error);
+    }
+}
+
+
+async function removeMany({ query }) {
+    try {
+        const comments = await Comment.find(query);
+        await Comment.deleteMany(query);
+        logger.info(`${comments.length} comment deleted`)
+        return {
+            comments,
+            ok: true
+        }
+    } catch (error) {
+        logger.error({
+            message: "invalid arguments",
+            payload: {
+                args: { query },
+                endpoint: "removeMany"
+            }
+        })
+        throw Error(error);
     }
 }
 
@@ -54,6 +171,6 @@ module.exports = {
     create,
     update,
     remove,
-
+    removeMany,
 }
 

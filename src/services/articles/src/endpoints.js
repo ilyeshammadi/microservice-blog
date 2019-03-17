@@ -1,13 +1,7 @@
 const grpc = require('grpc');
 const { each } = require('lodash');
 
-const logger = require('../common/js/logger')
-const events = require('../common/js/events')
-const { Broker } = require('../common/js/broker')
-
 const handlers = require('./handlers');
-
-const broker = new Broker();
 
 async function list(call) {
     const articles = await handlers.list(call.request);

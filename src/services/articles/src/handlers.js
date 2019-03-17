@@ -1,7 +1,6 @@
 const logger = require('../common/js/logger');
 const events = require('../common/js/events')
 const { Broker } = require('../common/js/broker')
-
 const { Article } = require('./models')
 
 const broker = new Broker();
@@ -75,7 +74,7 @@ async function create(article) {
                 endpoint: "create"
             }
         })
-        return articleCreated;
+        return { article: articleCreated };
     } catch (error) {
         logger.error({
             message: "can not create article",

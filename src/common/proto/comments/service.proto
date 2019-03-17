@@ -3,7 +3,9 @@ syntax = "proto3";
 service Service {
     rpc List(ListRequest) returns (stream Comment) {}
     rpc Get(GetRequest) returns (Comment) {}
-    rpc Create (CreateRequest) returns (Comment) {};
+    rpc Create (CreateRequest) returns (CreateReponse) {};
+    rpc Update(UpdateRequest) returns (UpdateResponse) {};
+    rpc Remove(RemoveRequest) returns (RemoveResponse) {};
 }
 
 message Empty {}
@@ -32,6 +34,29 @@ message CreateRequest {
     string content = 1;
     string authorId = 2;
     string articleId = 3;
+}
+
+message CreateReponse {
+    required Comment comment = 1;
+}
+
+message UpdateRequest {
+    required string id = 1;
+    string title = 2;
+    string content = 3;
+}
+
+message UpdateResponse {
+    required Comment comment = 1;
+}
+
+message RemoveRequest {
+    required string id = 1;
+}
+
+message RemoveResponse {
+    Comment comment = 1;
+    required bool ok = 2 [ default = false ];
 }
 
 message Query {

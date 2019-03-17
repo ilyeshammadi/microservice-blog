@@ -1,47 +1,67 @@
+const grpc = require('grpc');
 const { each } = require('lodash');
 
-const logger = require('../common/js/logger');
 const handlers = require('./handlers');
 
+async function list(call) {
+    const comments = await handlers.list(call.request);
 
-function list(call) {
-    logger.info({
-        message: "Getting a list of comments",
-        payload: {
-            endpoint: 'List',
-            args: call.request
-        }
+    // Send each comment and close the connection when it finishs
+    each(comments, comment => {
+        call.write(comment);
     })
-    handlers.list(call.request).then(({ comments }) => {
-        each(comments, comment => call.write(comment))
-        call.end()
-    });
+    call.end();
 }
 
-function get(call, callback) {
-    logger.info({
-        message: "Getting one comment",
-        payload: {
-            endpoint: 'Get',
-            args: call.request
-        }
-    })
-    handlers.get(call.request).then((response) => callback(null, response))
+async function get(call, callback) {
+    try {
+        callback(null, await handlers.get(call.request))
+    } catch (error) {
+        callback({
+            code: grpc.status.NOT_FOUND,
+            message: "comment not found",
+        }, null)
+    }
 }
 
-function create(call, callback) {
-    logger.info({
-        message: "Creating a comment",
-        payload: {
-            endpoint: 'Create',
-            args: call.request
-        }
-    })
-    handlers.create(call.request).then(response => callback(null, response))
+async function create(call, callback) {
+    try {
+        callback(null, await handlers.create(call.request))
+    } catch (error) {
+        callback({
+            code: grpc.status.INVALID_ARGUMENT,
+            message: "can not create comment",
+        }, null)
+    }
+}
+
+async function update(call, callback) {
+    try {
+        callback(null, await handlers.update(call.request));
+    } catch (error) {
+        callback({
+            code: grpc.status.NOT_FOUND,
+            message: "comment not found",
+        }, null)
+
+    }
+}
+
+async function remove(call, callback) {
+    try {
+        callback(null, await handlers.remove(call.request));
+    } catch (error) {
+        callback({
+            code: grpc.status.NOT_FOUND,
+            message: "comment not found",
+        }, null)
+    }
 }
 
 module.exports = {
     list,
     get,
     create,
+    update,
+    remove
 }

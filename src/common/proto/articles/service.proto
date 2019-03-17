@@ -33,7 +33,6 @@ message UpdateRequest {
     required string id = 1;
     string title = 2;
     string content = 3;
-    string authorId = 4;
 }
 
 message UpdateResponse {
