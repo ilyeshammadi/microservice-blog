@@ -7,9 +7,11 @@ volumes:
 # Services
 services:
   gateway:
-    build: ../../srv/gateway
-    volumes:
-      - ../../srv/proto:/usr/src/app/proto
+    build:
+      context: ../../src
+      dockerfile: services/gateway/Dockerfile
+      args:
+        SERVICE: gateway
     ports:
       - "4000:4000"
     depends_on:
@@ -18,28 +20,57 @@ services:
       - users
 
   auth:
-    build: ../../srv/auth
-    volumes:
-      - ../../srv/proto:/usr/src/app/proto
+    build:
+      context: ../../src
+      dockerfile: services/auth/Dockerfile
+      args:
+        SERVICE: auth
     depends_on:
       - users
+      - mongo
 
   users:
-    build: ../../srv/users
-    volumes:
-      - ../../srv/proto:/usr/src/app/proto
+    build:
+      context: ../../src
+      dockerfile: services/users/Dockerfile
+      args:
+        SERVICE: users
+    depends_on:
+      - mongo
 
   articles:
-    build: ../../srv/articles
-    volumes:
-      - ../../srv/proto:/usr/src/app/proto
+    build:
+      context: ../../src
+      dockerfile: services/articles/Dockerfile
+      args:
+        SERVICE: articles
+    depends_on:
+      - mongo
 
   comments:
-    build: ../../srv/comments
-    volumes:
-      - ../../srv/proto:/usr/src/app/proto
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile
+      args:
+        SERVICE: comments
+    depends_on:
+      - mongo
+
+  comments-subscriber:
+    command: npm run start-subscriber:prod
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile
+      args:
+        SERVICE: comments
+    depends_on:
+      - mongo
+      - rabbitmq
 
   mongo:
     image: mongo
     volumes:
       - mongodb:/data/db
+
+  rabbitmq:
+    image: rabbitmq
