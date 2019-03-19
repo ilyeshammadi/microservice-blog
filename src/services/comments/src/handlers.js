@@ -70,7 +70,7 @@ async function create(comment) {
                 endpoint: "create"
             }
         })
-        return commentCreated;
+        return { comment: commentCreated };
     } catch (error) {
         logger.error({
             message: "can not create comment",
