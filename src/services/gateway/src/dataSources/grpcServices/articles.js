@@ -3,9 +3,14 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 const services = require('../../../common/js/services')
 
 module.exports = class GRPCService extends RESTDataSource {
+
+    constructor(params) {
+        super(params);
+        this.client = services.getArticlesServiceClient();
+    }
+
     async list(request) {
-        const articlesServiceClient = services.getArticlesServiceClient();
-        const call = articlesServiceClient.list(request);
+        const call = this.client.list(request);
         const articles = await new Promise((resolve, reject) => {
             const articles = []
             call.on('data', article => {
@@ -20,9 +25,8 @@ module.exports = class GRPCService extends RESTDataSource {
     }
 
     async get({ id }) {
-        const articlesServiceClient = services.getArticlesServiceClient();
         const result = await new Promise((reslove, reject) => {
-            articlesServiceClient.get({ id }, (err, res) => {
+            this.client.get({ id }, (err, res) => {
                 if (err) reject(err)
                 reslove(res);
             });
@@ -31,9 +35,8 @@ module.exports = class GRPCService extends RESTDataSource {
     }
 
     async create(request) {
-        const articlesServiceClient = services.getArticlesServiceClient();
         const result = await new Promise((reslove, reject) => {
-            articlesServiceClient.create(request, (err, res) => {
+            this.client.create(request, (err, res) => {
                 if (err) reject(err)
                 reslove(res);
             });
@@ -43,9 +46,8 @@ module.exports = class GRPCService extends RESTDataSource {
 
 
     async update(request) {
-        const articlesServiceClient = services.getArticlesServiceClient();
         const result = await new Promise((reslove, reject) => {
-            articlesServiceClient.update(request, (err, res) => {
+            this.client.update(request, (err, res) => {
                 if (err) reject(err)
                 reslove(res);
             });
@@ -54,9 +56,8 @@ module.exports = class GRPCService extends RESTDataSource {
     }
 
     async remove(request) {
-        const articlesServiceClient = services.getArticlesServiceClient();
         const result = await new Promise((reslove, reject) => {
-            articlesServiceClient.remove(request, (err, res) => {
+            this.client.remove(request, (err, res) => {
                 if (err) reject(err)
                 reslove(res);
             });

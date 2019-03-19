@@ -4,9 +4,14 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 const services = require('../../../common/js/services')
 
 module.exports = class GRPCService extends RESTDataSource {
+
+    constructor(params) {
+        super(params);
+        this.client = services.getUsersServiceClient();
+    }
+
     async list(request) {
-        const usersServiceClient = services.getUsersServiceClient();
-        const call = usersServiceClient.list(request)
+        const call = this.client.list(request)
         return await new Promise((resolve, reject) => {
             const users = [];
             call.on('data', user => {
@@ -20,10 +25,9 @@ module.exports = class GRPCService extends RESTDataSource {
     }
 
     async create({ username, password }) {
-        const usersServiceClient = services.getUsersServiceClient();
         const createRequest = { username, password };
         const result = await new Promise((resolve, reject) => {
-            usersServiceClient.create(createRequest, (err, res) => {
+            this.client.create(createRequest, (err, res) => {
                 if (err) reject(err);
                 if (res) resolve(res.user);
             })
@@ -32,10 +36,9 @@ module.exports = class GRPCService extends RESTDataSource {
     }
 
     async get({ id }) {
-        const usersServiceClient = services.getUsersServiceClient();
         const getRequest = { id };
         const result = await new Promise((resolve, reject) => {
-            usersServiceClient.get(getRequest, (err, res) => {
+            this.client.get(getRequest, (err, res) => {
                 if (err) reject(err);
                 resolve(res);
             })
