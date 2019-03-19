@@ -12,6 +12,7 @@ services:
       dockerfile: services/gateway/Dockerfile.dev
       args:
         SERVICE: gateway
+    restart: always
     volumes:
       - ../../src/common:/src/services/gateway/common
       - ../../src/services/gateway/src:/src/services/gateway/src
@@ -21,6 +22,7 @@ services:
       - auth
       - articles
       - users
+      - redis
 
   auth:
     build:
@@ -28,6 +30,7 @@ services:
       dockerfile: services/auth/Dockerfile.dev
       args:
         SERVICE: auth
+    restart: always
     volumes:
       - ../../src/common:/src/services/auth/common
       - ../../src/services/auth/src:/src/services/auth/src
@@ -43,6 +46,7 @@ services:
       dockerfile: services/users/Dockerfile.dev
       args:
         SERVICE: users
+    restart: always
     volumes:
       - ../../src/common:/src/services/users/common
       - ../../src/services/users/src:/src/services/users/src
@@ -57,6 +61,7 @@ services:
       dockerfile: services/articles/Dockerfile.dev
       args:
         SERVICE: articles
+    restart: always
     volumes:
       - ../../src/common:/src/services/articles/common
       - ../../src/services/articles/src:/src/services/articles/src
@@ -71,6 +76,7 @@ services:
       dockerfile: services/comments/Dockerfile.dev
       args:
         SERVICE: comments
+    restart: always
     volumes:
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
@@ -86,6 +92,7 @@ services:
       dockerfile: services/comments/Dockerfile.dev
       args:
         SERVICE: comments
+    restart: always
     volumes:
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
@@ -104,3 +111,6 @@ services:
     image: rabbitmq
     ports:
       - "5672:5672"
+
+  redis:
+    image: redis

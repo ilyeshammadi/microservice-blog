@@ -14,10 +14,12 @@ services:
         SERVICE: gateway
     ports:
       - "4000:4000"
+    restart: on-failure
     depends_on:
       - auth
       - articles
       - users
+      - redis
 
   auth:
     build:
@@ -25,6 +27,7 @@ services:
       dockerfile: services/auth/Dockerfile
       args:
         SERVICE: auth
+    restart: on-failure
     depends_on:
       - users
       - mongo
@@ -35,6 +38,7 @@ services:
       dockerfile: services/users/Dockerfile
       args:
         SERVICE: users
+    restart: on-failure
     depends_on:
       - mongo
 
@@ -44,6 +48,7 @@ services:
       dockerfile: services/articles/Dockerfile
       args:
         SERVICE: articles
+    restart: on-failure
     depends_on:
       - mongo
 
@@ -53,6 +58,7 @@ services:
       dockerfile: services/comments/Dockerfile
       args:
         SERVICE: comments
+    restart: on-failure
     depends_on:
       - mongo
 
@@ -63,6 +69,7 @@ services:
       dockerfile: services/comments/Dockerfile
       args:
         SERVICE: comments
+    restart: on-failure
     depends_on:
       - mongo
       - rabbitmq
@@ -74,3 +81,6 @@ services:
 
   rabbitmq:
     image: rabbitmq
+
+  redis:
+    image: redis

@@ -1,4 +1,6 @@
 const { ApolloServer } = require('apollo-server');
+const { RedisCache } = require('apollo-server-cache-redis');
+
 const logger = require('../common/js/logger')
 const resolvers = require('./resolvers');
 const typeDefs = require('./typeDefs');
@@ -15,7 +17,10 @@ const server = new ApolloServer({
     const user = await getUser(token);
 
     return { user };
-  }
+  },
+  cache: new RedisCache({
+    host: 'redis'
+  }),
 });
 
 server.listen().then(({ url }) => {
