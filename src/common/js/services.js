@@ -1,36 +1,28 @@
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 
-function getUsersServiceClient() {
-    const PROTO_PATH = './common/proto/users/service.proto';
-    const SERVICE_ADDRESS = 'users:50050';
+function getServiceClient(serviceName, port = '50050') {
+    const PROTO_PATH = `./common/proto/${serviceName}/service.proto`;
+    const SERVICE_ADDRESS = `${serviceName}:${port}`;
     const packageDefinition = protoLoader.loadSync(PROTO_PATH);
     const service = grpc.loadPackageDefinition(packageDefinition);
     return new service.Service(SERVICE_ADDRESS, grpc.credentials.createInsecure());
+}
+
+function getUsersServiceClient() {
+    return getServiceClient('users');
 }
 
 function getAuthServiceClient() {
-    const PROTO_PATH = './common/proto/auth/service.proto';
-    const SERVICE_ADDRESS = 'auth:50050';
-    const packageDefinition = protoLoader.loadSync(PROTO_PATH);
-    const service = grpc.loadPackageDefinition(packageDefinition);
-    return new service.Service(SERVICE_ADDRESS, grpc.credentials.createInsecure());
+    return getServiceClient('auth');
 }
 
 function getArticlesServiceClient() {
-    const PROTO_PATH = './common/proto/articles/service.proto';
-    const SERVICE_ADDRESS = 'articles:50050';
-    const packageDefinition = protoLoader.loadSync(PROTO_PATH);
-    const service = grpc.loadPackageDefinition(packageDefinition);
-    return new service.Service(SERVICE_ADDRESS, grpc.credentials.createInsecure());
+    return getServiceClient('articles');
 }
 
 function getCommentsServiceClient() {
-    const PROTO_PATH = './common/proto/comments/service.proto';
-    const SERVICE_ADDRESS = 'comments:50050';
-    const packageDefinition = protoLoader.loadSync(PROTO_PATH);
-    const service = grpc.loadPackageDefinition(packageDefinition);
-    return new service.Service(SERVICE_ADDRESS, grpc.credentials.createInsecure());
+    return getServiceClient('comments');
 }
 
 module.exports = {
@@ -38,4 +30,5 @@ module.exports = {
     getAuthServiceClient,
     getArticlesServiceClient,
     getCommentsServiceClient,
+    getServiceClient
 }
