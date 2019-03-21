@@ -11,8 +11,10 @@ async function login({ username, password }) {
         // it should return one, I hope 😅
         const user = await getLoggedinUser(username, password);
         if (!user) throw Error(message);
-        console.log(user);
+
+        // Retreive the token if the user was found
         if (user) {
+            // Get the token otherwise create a new one
             const query = { userId: user.id }
             let auth = await Auth.findOne(query);
             if (!auth) {
@@ -30,11 +32,22 @@ async function login({ username, password }) {
 }
 
 async function getUser(request) {
-    // Get the userId that has this token
-    const query = { token: request.token };
-    const auth = await Auth.findOne(query)
-    if (!auth) return null;
-    return await getUserById({ id: auth.id });
+    const message = 'invalid token'
+    try {
+        // Get the userId that has this token
+        const query = { token: request.token };
+        const auth = await Auth.findOne(query)
+        if (!auth) throw Error(message);
+        const user = await getUserById({ id: auth.userId });
+        logger.info('authenticated user by token');
+        return user;
+    } catch (error) {
+        logger.error({
+            message,
+            error
+        })
+        throw Error(message);
+    }
 }
 
 module.exports = {

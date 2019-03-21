@@ -25,7 +25,6 @@ async function get(id) {
     } catch (error) {
         const message = 'could not get user';
         logger.error({
-            error,
             message,
             payload: { id }
         })

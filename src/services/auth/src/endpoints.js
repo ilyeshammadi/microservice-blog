@@ -16,24 +16,14 @@ async function login(call, callback) {
 }
 
 async function getUser(call, callback) {
-    logger.info({
-        message: "Getting the user by the token",
-        payload: {
-            endpoint: "getUser"
-        }
-    })
-    handlers.getUser(call.request)
-        .then((response) => {
-            if (response) {
-                callback(null, response)
-            } else {
-                callback({
-                    code: 404,
-                    message: "invalid token",
-                    status: grpc.status.NOT_FOUND,
-                }, null)
-            }
-        })
+    try {
+        callback(null, await handlers.getUser(call.request));
+    } catch (error) {
+        callback({
+            code: grpc.status.NOT_FOUND,
+            message: "invalid token",
+        }, null);
+    }
 }
 
 module.exports = {

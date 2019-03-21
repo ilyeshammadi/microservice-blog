@@ -25,7 +25,7 @@ async function getLoggedinUser(username, password) {
 }
 
 
-async function getUserById(id) {
+async function getUserById({ id }) {
     const usersServiceClient = services.getUsersServiceClient();
     return await new Promise((resolve, reject) => {
         usersServiceClient.get({ id }, (err, res) => {
