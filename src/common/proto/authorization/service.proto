@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+service Service {
+    rpc Can(CanRequest) returns (CanResponse) {}
+    rpc CanOnInstance(CanOnInstanceRequest) returns (CanOnInstanceResponse) {}
+    rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {};
+}
+
+message Role {
+    string id = 1;
+    string userId = 2;
+    string type = 3;
+}
+
+message CanRequest {
+    required string userId = 1;
+    required string action = 2;
+    required string subject = 3;
+}
+
+message CanResponse {
+    bool yes = 1 [default = false];
+}
+
+
+message CanOnInstanceRequest {
+    required string userId = 1;
+    required string action = 2;
+    required string subject = 3;
+    required string subjectId = 4;
+}
+
+message CanOnInstanceResponse {
+    bool yes = 1;
+}
+
+message CreateRoleRequest {
+    string userId = 1;
+    // type can be admin or user
+    string type = 2;
+}
+
+message CreateRoleResponse {
+    Role role = 1;
+}

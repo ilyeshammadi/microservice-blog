@@ -3,29 +3,19 @@ const logger = require('../common/js/logger');
 
 const handlers = require('./handlers');
 
-function login(call, callback) {
-    logger.info({
-        message: "User login",
-        payload: {
-            endpoint: "Login"
-        }
-    })
-    handlers.login(call.request)
-        .then((response) => {
-            if (response) {
-                callback(null, response)
-            } else {
-                callback({
-                    code: 404,
-                    message: "user with this username and password does not exists",
-                    status: grpc.status.NOT_FOUND,
-                }, null)
-            }
+async function login(call, callback) {
+    try {
+        callback(null, await handlers.login(call.request));
+    } catch (error) {
+        callback({
+            status: grpc.status.NOT_FOUND,
+            message: "user with this username and password does not exists",
+        }, null)
+    }
 
-        })
 }
 
-function getUser(call, callback) {
+async function getUser(call, callback) {
     logger.info({
         message: "Getting the user by the token",
         payload: {

@@ -40,6 +40,24 @@ services:
       - users
       - mongo
 
+  authorization:
+    build:
+      context: ../../src
+      dockerfile: services/authorization/Dockerfile.dev
+      args:
+        SERVICE: authorization
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/authorization/common
+      - ../../src/services/authorization/src:/src/services/authorization/src
+    ports:
+      - "50051:50050"
+    depends_on:
+      - mongo
+      - users
+      - articles
+      - comments
+
   users:
     build:
       context: ../../src
@@ -51,7 +69,7 @@ services:
       - ../../src/common:/src/services/users/common
       - ../../src/services/users/src:/src/services/users/src
     ports:
-      - "50051:50050"
+      - "50052:50050"
     depends_on:
       - mongo
 
@@ -66,7 +84,7 @@ services:
       - ../../src/common:/src/services/articles/common
       - ../../src/services/articles/src:/src/services/articles/src
     ports:
-      - "50052:50050"
+      - "50053:50050"
     depends_on:
       - mongo
 
@@ -81,7 +99,7 @@ services:
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
     ports:
-      - "50053:50050"
+      - "50054:50050"
     depends_on:
       - mongo
 
