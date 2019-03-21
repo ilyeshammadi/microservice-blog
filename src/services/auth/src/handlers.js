@@ -3,14 +3,15 @@ const { generateToken, getLoggedinUser, getUserById } = require('./utils')
 const { Auth } = require('./models')
 
 async function login({ username, password }) {
+    const message = 'wrong username or password';
     if (!username || !password) throw Error('missing username or password');
 
     try {
         // Query the list of users with username and password
         // it should return one, I hope 😅
         const user = await getLoggedinUser(username, password);
-        if (!user) throw Error();
-
+        if (!user) throw Error(message);
+        console.log(user);
         if (user) {
             const query = { userId: user.id }
             let auth = await Auth.findOne(query);
@@ -22,8 +23,8 @@ async function login({ username, password }) {
             return { token: auth.token };
         }
     } catch (error) {
-        logger.error({ error, username });
-        throw Error('wrong username or password');
+        logger.error({ message, error, username });
+        throw Error(message);
     }
 
 }

@@ -13,12 +13,15 @@ function generateToken() {
 async function getLoggedinUser(username, password) {
     const usersServiceClient = services.getUsersServiceClient();
     const call = usersServiceClient.list({ query: { username, password } })
-    return await new Promise((resolve, reject) => {
+    const user = await new Promise((resolve, reject) => {
+        let foundUser;
         call.on('data', user => {
-            resolve(user);
+            foundUser = user;
         })
+        call.on('end', () => resolve(foundUser));
         call.on('error', err => reject(err));
     })
+    return user;
 }
 
 
