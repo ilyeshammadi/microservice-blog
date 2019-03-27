@@ -1,0 +1,86 @@
+version: "3"
+
+# Volumes
+volumes:
+  mongodb:
+
+# Services
+services:
+  gateway:
+    build:
+      context: ../../src
+      dockerfile: services/gateway/Dockerfile
+      args:
+        SERVICE: gateway
+    ports:
+      - "4000:4000"
+    restart: on-failure
+    depends_on:
+      - auth
+      - articles
+      - users
+      - redis
+
+  auth:
+    build:
+      context: ../../src
+      dockerfile: services/auth/Dockerfile
+      args:
+        SERVICE: auth
+    restart: on-failure
+    depends_on:
+      - users
+      - mongo
+
+  users:
+    build:
+      context: ../../src
+      dockerfile: services/users/Dockerfile
+      args:
+        SERVICE: users
+    restart: on-failure
+    depends_on:
+      - mongo
+
+  articles:
+    build:
+      context: ../../src
+      dockerfile: services/articles/Dockerfile
+      args:
+        SERVICE: articles
+    restart: on-failure
+    depends_on:
+      - mongo
+
+  comments:
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile
+      args:
+        SERVICE: comments
+    restart: on-failure
+    depends_on:
+      - mongo
+
+  comments-subscriber:
+    command: npm run start-subscriber:prod
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile
+      args:
+        SERVICE: comments
+    restart: on-failure
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+
+  rabbitmq:
+    image: rabbitmq
+
+  redis:
+    image: redis

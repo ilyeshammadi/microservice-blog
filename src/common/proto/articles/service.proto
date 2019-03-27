@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+service Service {
+    rpc List(ListRequest) returns (stream Article) {}
+    rpc Get(GetRequest) returns (Article) {}
+    rpc Create (CreateRequest) returns (CreateReponse) {};
+    rpc Update(UpdateRequest) returns (UpdateResponse) {};
+    rpc Remove(RemoveRequest) returns (RemoveResponse) {};
+}
+
+message Article {
+    string id = 1;
+    string title = 2;
+    string content = 3;
+    string authorId = 4;
+}
+
+message GetRequest {
+    string id = 1;
+}
+
+message CreateRequest {
+    required string title = 1;
+    required string content = 2;
+    required string authorId = 3;
+}
+
+message CreateReponse {
+    required Article article = 1;
+}
+
+message UpdateRequest {
+    required string id = 1;
+    string title = 2;
+    string content = 3;
+}
+
+message UpdateResponse {
+    required Article article = 1;
+}
+
+message RemoveRequest {
+    required string id = 1;
+}
+
+message RemoveResponse {
+    Article article = 1;
+    required bool ok = 2 [ default = false ];
+}
+
+message Query {
+    string authorId = 1;
+}
+
+message Paginator {
+    uint32 page = 1 [default = 1];
+    uint32 limit = 2 [default = 10];
+}
+
+message ListRequest {
+    Query query = 1 ;
+    Paginator paginator = 2;
+}

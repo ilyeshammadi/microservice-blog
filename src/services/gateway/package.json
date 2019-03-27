@@ -1,0 +1,19 @@
+{
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon src/index.js",
+		"start:prod": "node src/index.js"
+	},
+	"dependencies": {
+		"@grpc/proto-loader": "^0.4.0",
+		"apollo-datasource-rest": "^0.3.2",
+		"apollo-server": "^2.4.2",
+		"apollo-server-cache-redis": "^0.3.1",
+		"graphql": "^14.1.1",
+		"grpc": "^1.18.0",
+		"winston": "^3.2.1"
+	},
+	"devDependencies": {
+		"nodemon": "^1.18.10"
+	}
+}

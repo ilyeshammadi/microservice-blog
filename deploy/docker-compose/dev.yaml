@@ -1,0 +1,116 @@
+version: "3"
+
+# Volumes
+volumes:
+  mongodb:
+
+# Services
+services:
+  gateway:
+    build:
+      context: ../../src
+      dockerfile: services/gateway/Dockerfile.dev
+      args:
+        SERVICE: gateway
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/gateway/common
+      - ../../src/services/gateway/src:/src/services/gateway/src
+    ports:
+      - "4000:4000"
+    depends_on:
+      - auth
+      - articles
+      - users
+      - redis
+
+  auth:
+    build:
+      context: ../../src
+      dockerfile: services/auth/Dockerfile.dev
+      args:
+        SERVICE: auth
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/auth/common
+      - ../../src/services/auth/src:/src/services/auth/src
+    ports:
+      - "50050:50050"
+    depends_on:
+      - users
+      - mongo
+
+  users:
+    build:
+      context: ../../src
+      dockerfile: services/users/Dockerfile.dev
+      args:
+        SERVICE: users
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/users/common
+      - ../../src/services/users/src:/src/services/users/src
+    ports:
+      - "50051:50050"
+    depends_on:
+      - mongo
+
+  articles:
+    build:
+      context: ../../src
+      dockerfile: services/articles/Dockerfile.dev
+      args:
+        SERVICE: articles
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/articles/common
+      - ../../src/services/articles/src:/src/services/articles/src
+    ports:
+      - "50052:50050"
+    depends_on:
+      - mongo
+
+  comments:
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile.dev
+      args:
+        SERVICE: comments
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/comments/common
+      - ../../src/services/comments/src:/src/services/comments/src
+    ports:
+      - "50053:50050"
+    depends_on:
+      - mongo
+
+  comments-subscriber:
+    command: npm run start-subscriber
+    build:
+      context: ../../src
+      dockerfile: services/comments/Dockerfile.dev
+      args:
+        SERVICE: comments
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/comments/common
+      - ../../src/services/comments/src:/src/services/comments/src
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+
+  redis:
+    image: redis
