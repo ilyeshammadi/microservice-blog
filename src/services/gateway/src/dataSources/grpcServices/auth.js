@@ -1,3 +1,4 @@
+const { ApolloError } = require('apollo-server')
 const { RESTDataSource } = require('apollo-datasource-rest');
 
 const services = require('../../../common/js/services')
@@ -22,12 +23,14 @@ module.exports = class GRPCService extends RESTDataSource {
         return result;
     }
 
-    async getUser(token) {
-        const result = await new Promise((reslove, reject) => {
+    async authenticate(token) {
+        const user = await new Promise((reslove, reject) => {
             this.client.getUser({ token }, (err, res) => {
                 reslove(res);
             });
         })
-        return result;
+        if (!user) throw new AuthenticationError("invalid credentials");
+        return user;
+
     }
 }

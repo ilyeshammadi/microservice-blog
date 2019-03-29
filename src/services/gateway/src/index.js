@@ -7,6 +7,7 @@ const typeDefs = require('./typeDefs');
 
 const {
   AuthGRPCService,
+  AuthorizationGRPCService,
   UsersGRPCService,
   ArticlesGRPCService,
   CommentsGRPCService,
@@ -18,6 +19,7 @@ const server = new ApolloServer({
   resolvers,
   dataSources: () => ({
     auth: new AuthGRPCService(),
+    ability: new AuthorizationGRPCService(),
     users: new UsersGRPCService(),
     articles: new ArticlesGRPCService(),
     comments: new CommentsGRPCService()
@@ -25,12 +27,7 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     // get the user token from the headers
     const token = req.headers.authorization || '';
-
-    // try to retrieve a user with the token
-    const auth = new AuthGRPCService();
-    const user = await auth.getUser(token);
-
-    return { user };
+    return { token };
   },
   cache: new RedisCache({
     host: 'redis'

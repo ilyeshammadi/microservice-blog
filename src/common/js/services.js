@@ -25,10 +25,15 @@ function getCommentsServiceClient() {
     return getServiceClient('comments');
 }
 
+function getAuthorizationServiceClient() {
+    return getServiceClient('authorization');
+}
+
 module.exports = {
+    getServiceClient,
     getUsersServiceClient,
     getAuthServiceClient,
     getArticlesServiceClient,
     getCommentsServiceClient,
-    getServiceClient
+    getAuthorizationServiceClient,
 }
