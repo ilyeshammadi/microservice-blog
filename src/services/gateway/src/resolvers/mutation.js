@@ -38,10 +38,46 @@ async function deleteArticle(_, { deleteArticleInput }, { token, dataSources: { 
     return articles.remove({ authorId: user.id, ...deleteArticleInput })
 }
 
+async function createComment(_, { createCommentInput }, { token, dataSources: { auth, ability, comments } }) {
+    const user = await auth.authenticate(token);
+    await ability.can({
+        userId: user.id,
+        action: 'create',
+        subject: 'Comment'
+    });
+    return comments.create({ authorId: user.id, ...createCommentInput });
+}
+
+async function updateComment(_, { updateCommentInput }, { token, dataSources: { auth, ability, comments } }) {
+    const user = await auth.authenticate(token);
+    await ability.canOnInstance({
+        userId: user.id,
+        action: 'update',
+        subject: 'Comment',
+        subjectId: updateCommentInput.id
+    });
+    return comments.update({ authorId: user.id, ...updateCommentInput });
+};
+
+async function deleteComment(_, { deleteCommentInput }, { token, dataSources: { auth, ability, comments } }) {
+    const user = await auth.authenticate(token);
+    await ability.canOnInstance({
+        userId: user.id,
+        action: 'delete',
+        subject: 'Comment',
+        subjectId: deleteCommentInput.id
+    });
+    return comments.remove({ authorId: user.id, ...deleteCommentInput })
+}
+
+
 module.exports = {
     login,
     register,
     createArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    createComment,
+    updateComment,
+    deleteComment,
 }

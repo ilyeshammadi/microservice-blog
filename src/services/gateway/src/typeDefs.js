@@ -59,6 +59,19 @@ module.exports = gql`
     ok: Boolean!
   }
 
+  type CreateCommentResponse {
+    comment: Comment
+  }
+
+  type UpdateCommentResponse {
+    comment: Comment
+  }
+
+  type DeleteCommentResponse {
+    comment: Comment
+    ok: Boolean!
+  }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -79,6 +92,20 @@ module.exports = gql`
     id: ID!
   }
 
+  input CreateCommentInput {
+    content: String!
+    articleId: ID!
+  }
+
+  input UpdateCommentInput {
+    id: ID!
+    content: String
+  }
+
+  input DeleteCommentInput {
+    id: ID!
+  }
+
   type Query {
     user(id: ID!): User
     users(paginator: Paginator): [User]
@@ -91,9 +118,13 @@ module.exports = gql`
   type Mutation {
     login(loginInput: LoginInput!): LoginResponse
     register(registerInput: RegisterInput!): RegisterResponse
+    
     createArticle(createArticleInput: CreateArticleInput!): CreateArticleResponse
     updateArticle(updateArticleInput: UpdateArticleInput!): UpdateArticleResponse
     deleteArticle(deleteArticleInput: DeleteArticleInput!): DeleteArticleResponse
-  }
 
+    createComment(createCommentInput: CreateCommentInput!): CreateCommentResponse
+    updateComment(updateCommentInput: UpdateCommentInput!): UpdateCommentResponse
+    deleteComment(deleteCommentInput: DeleteCommentInput!): DeleteCommentResponse
+  }
 `; 

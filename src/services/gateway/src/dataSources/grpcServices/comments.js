@@ -44,4 +44,24 @@ module.exports = class GRPCService extends RESTDataSource {
         })
         return result;
     }
+
+    async update(request) {
+        const result = await new Promise((reslove, reject) => {
+            this.client.update(request, (err, res) => {
+                if (err) reject(err)
+                reslove(res);
+            });
+        })
+        return result;
+    }
+
+    async remove(request) {
+        const result = await new Promise((reslove, reject) => {
+            this.client.remove(request, (err, res) => {
+                if (err) reject(err)
+                reslove(res);
+            });
+        })
+        return result;
+    }
 }
