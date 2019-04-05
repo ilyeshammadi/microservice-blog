@@ -1,32 +1,25 @@
-const grpc = require('grpc');
-const logger = require('../common/js/logger');
+import { status } from 'grpc';
+import * as handlers from './handlers';
 
-const handlers = require('./handlers');
-
-async function login(call, callback) {
+export async function login(call, callback: Function) {
     try {
         callback(null, await handlers.login(call.request));
     } catch (error) {
         callback({
-            status: grpc.status.NOT_FOUND,
+            status: status.NOT_FOUND,
             message: "user with this username and password does not exists",
         }, null)
     }
 
 }
 
-async function getUser(call, callback) {
+export async function getUser(call, callback: Function) {
     try {
         callback(null, await handlers.getUser(call.request));
     } catch (error) {
         callback({
-            code: grpc.status.NOT_FOUND,
+            code: status.NOT_FOUND,
             message: "invalid token",
         }, null);
     }
-}
-
-module.exports = {
-    login,
-    getUser,
 }

@@ -1,4 +1,4 @@
-const { ApolloError } = require('apollo-server')
+const { AuthenticationError } = require('apollo-server')
 const { RESTDataSource } = require('apollo-datasource-rest');
 
 const services = require('../../../common/js/services')
@@ -18,7 +18,7 @@ module.exports = class GRPCService extends RESTDataSource {
             });
         })
         if (!result) {
-            throw new ApolloError("user with username or password does not exists")
+            throw new AuthenticationError("user with username or password does not exists")
         }
         return result;
     }

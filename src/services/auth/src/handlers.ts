@@ -1,15 +1,26 @@
-const logger = require('../common/js/logger')
-const { generateToken, getLoggedinUser, getUserById } = require('./utils')
-const { Auth } = require('./models')
+// @ts-ignore
+import * as logger from '../common/js/logger';
+import { generateToken, getLoggedinUser, getUserById } from './utils/index'
+import { Auth } from './models';
 
-async function login({ username, password }) {
+interface LoginParams {
+    username: string
+    password: string
+}
+
+interface GetUserParams {
+    token: string
+}
+
+export async function login(params: LoginParams) {
+    const { username, password }: LoginParams = params;
     const message = 'wrong username or password';
     if (!username || !password) throw Error('missing username or password');
 
     try {
         // Query the list of users with username and password
         // it should return one, I hope 😅
-        const user = await getLoggedinUser(username, password);
+        const user: any = await getLoggedinUser(username, password);
         if (!user) throw Error(message);
 
         // Retreive the token if the user was found
@@ -31,14 +42,14 @@ async function login({ username, password }) {
 
 }
 
-async function getUser(request) {
+export async function getUser(params: GetUserParams) {
+    const { token }: GetUserParams = params;
     const message = 'invalid token'
     try {
         // Get the userId that has this token
-        const query = { token: request.token };
-        const auth = await Auth.findOne(query)
+        const auth = await Auth.findOne({ token });
         if (!auth) throw Error(message);
-        const user = await getUserById({ id: auth.userId });
+        const user = await getUserById(auth.userId);
         logger.info('authenticated user by token');
         return user;
     } catch (error) {
@@ -49,9 +60,3 @@ async function getUser(request) {
         throw Error(message);
     }
 }
-
-module.exports = {
-    login,
-    getUser,
-}
-

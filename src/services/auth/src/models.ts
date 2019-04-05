@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://mongo/auth', { useNewUrlParser: true });
+import { connect, model, Schema } from 'mongoose';
 
-const Schema = mongoose.Schema;
+connect('mongodb://mongo/auth', { useNewUrlParser: true });
 
 const AuthSchema = new Schema({
     token: {
@@ -16,6 +15,4 @@ const AuthSchema = new Schema({
     }
 })
 
-module.exports = {
-    Auth: mongoose.model('Auth', AuthSchema)
-}
+export const Auth = model('Auth', AuthSchema);

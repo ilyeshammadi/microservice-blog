@@ -1,6 +1,9 @@
-const services = require('../../common/js/services');
+import {
+    getUsersServiceClient
+    // @ts-ignore
+} from '../../common/js/services';
 
-function generateToken() {
+export function generateToken(): string {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -10,8 +13,8 @@ function generateToken() {
     return text;
 }
 
-async function getLoggedinUser(username, password) {
-    const usersServiceClient = services.getUsersServiceClient();
+export async function getLoggedinUser(username: string, password: string) {
+    const usersServiceClient = getUsersServiceClient();
     const call = usersServiceClient.list({ query: { username, password } })
     const user = await new Promise((resolve, reject) => {
         let foundUser;
@@ -25,18 +28,12 @@ async function getLoggedinUser(username, password) {
 }
 
 
-async function getUserById({ id }) {
-    const usersServiceClient = services.getUsersServiceClient();
+export async function getUserById(id: string) {
+    const usersServiceClient = getUsersServiceClient();
     return await new Promise((resolve, reject) => {
         usersServiceClient.get({ id }, (err, res) => {
             if (err) reject(err)
             resolve(res)
         })
     })
-}
-
-module.exports = {
-    generateToken,
-    getLoggedinUser,
-    getUserById
 }

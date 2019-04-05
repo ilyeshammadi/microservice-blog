@@ -1,8 +1,8 @@
 {
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon src/index.js",
-		"start:prod": "node src/index.js"
+		"start": "npx nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+		"start:prod": "node build/index.js"
 	},
 	"dependencies": {
 		"@grpc/proto-loader": "^0.4.0",
@@ -12,6 +12,9 @@
 		"winston": "^3.2.1"
 	},
 	"devDependencies": {
-		"nodemon": "^1.18.10"
+		"nodemon": "^1.18.10",
+		"@types/node": "^11.12.2",
+		"ts-node": "^8.0.3",
+		"typescript": "^3.4.1"
 	}
 }
