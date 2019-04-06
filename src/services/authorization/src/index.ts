@@ -1,9 +1,10 @@
-const grpc = require('../common/js/grpc')
-const service = require('./endpoints.js')
+// @ts-ignore
+import { Server } from '../common/js/grpc';
+import * as service from './endpoints';
 
 const PROTO_PATH = './common/proto/authorization/service.proto';
 
-new grpc.Server({
+new Server({
     protoFilePath: PROTO_PATH,
     service
 }).start();

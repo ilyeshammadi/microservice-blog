@@ -1,8 +1,9 @@
-const logger = require('../common/js/logger');
-const { canBySubject, canBySubjectInstance } = require('./utils/ability')
+// @ts-ignore
+import { logger } from '../common/js/logger';
+import { canBySubject, canBySubjectInstance } from './utils/ability';
 const { Role } = require('./models')
 
-async function can(request) {
+export async function can(request) {
     try {
         const { userId } = request;
         // Get all roles related with the user
@@ -18,7 +19,7 @@ async function can(request) {
     }
 }
 
-async function canOnInstance(request) {
+export async function canOnInstance(request) {
     try {
         const { userId } = request;
         // Get all roles related with the user
@@ -34,7 +35,7 @@ async function canOnInstance(request) {
     }
 }
 
-async function createRole(request) {
+export async function createRole(request) {
     const { userId, type } = request;
     // Check if there is an existing role with the combination of userId and type
     const existingRole = await Role.findOne({ userId, type });
@@ -54,11 +55,3 @@ async function createRole(request) {
         return { role };
     }
 }
-
-
-module.exports = {
-    can,
-    canOnInstance,
-    createRole
-}
-

@@ -1,11 +1,9 @@
-const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
+import { Schema, connect, model } from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate';
 
-const constants = require('./utils/constants')
+import * as constants from './utils/constants';
 
-mongoose.connect('mongodb://mongo/authorization', { useNewUrlParser: true });
-
-const Schema = mongoose.Schema;
+connect('mongodb://mongo/authorization', { useNewUrlParser: true });
 
 const subjectsEnum = Object.values(constants.SUBJECTS);
 const actionsEnum = Object.values(constants.ACTIONS);
@@ -29,7 +27,7 @@ const RoleSchema = new Schema({
 
 RoleSchema.plugin(mongoosePaginate);
 
-const Role = mongoose.model('Role', RoleSchema)
+export const Role = model('Role', RoleSchema)
 
 Role.newUserRole = async userId => {
     return await new Role({
@@ -47,6 +45,3 @@ Role.newAdminRole = async userId => {
     }).save()
 }
 
-module.exports = {
-    Role,
-}

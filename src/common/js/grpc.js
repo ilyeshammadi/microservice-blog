@@ -1,7 +1,7 @@
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
 
-const logger = require('./logger')
+const { logger } = require('./logger')
 
 class Server {
     constructor(args) {

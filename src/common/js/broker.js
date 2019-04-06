@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const amqpCallbackAPI = require('amqplib/callback_api');
 
-const logger = require('./logger');
+const { logger } = require('./logger');
 
 class Broker {
     constructor(args = {}) {
@@ -19,6 +19,7 @@ class Broker {
         logger.info("🎒 Subscriber waiting for events")
 
         amqpCallbackAPI.connect(this.brokerUrl, (err, conn) => {
+            if (!conn) process.exit(1);
             conn.createChannel((err, ch) => {
                 ch.assertExchange(this.ex, 'topic', { durable: false });
                 ch.assertQueue(queue, { exclusive: false }, (err, q) => {

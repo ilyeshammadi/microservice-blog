@@ -1,16 +1,16 @@
-const grpc = require('grpc');
+import * as grpc from 'grpc';
 
-const handlers = require('./handlers');
+import * as handlers from './handlers';
 
-async function can(call, callback) {
+export async function can(call, callback) {
     callback(null, await handlers.can(call.request))
 }
 
-async function canOnInstance(call, callback) {
+export async function canOnInstance(call, callback) {
     callback(null, await handlers.canOnInstance(call.request))
 }
 
-async function createRole(call, callback) {
+export async function createRole(call, callback) {
     try {
         callback(null, await handlers.createRole(call.request))
     } catch (error) {
@@ -19,10 +19,4 @@ async function createRole(call, callback) {
             message: "role already created"
         }, null)
     }
-}
-
-module.exports = {
-    can,
-    canOnInstance,
-    createRole
 }

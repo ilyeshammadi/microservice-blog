@@ -1,4 +1,4 @@
-const SUBJECTS = {
+export const SUBJECTS = {
     all: {
         name: 'all'
     },
@@ -16,7 +16,7 @@ const SUBJECTS = {
     },
 }
 
-const ACTIONS = {
+export const ACTIONS = {
     manage: 'manage',
     read: 'read',
     create: 'create',
@@ -24,7 +24,7 @@ const ACTIONS = {
     delete: 'delete'
 }
 
-const ROLE_TYPES = {
+export const ROLE_TYPES = {
     admin: {
         name: "admin",
         permissions: [
@@ -51,10 +51,4 @@ const ROLE_TYPES = {
             },
         ]
     }
-}
-
-module.exports = {
-    SUBJECTS,
-    ACTIONS,
-    ROLE_TYPES,
 }

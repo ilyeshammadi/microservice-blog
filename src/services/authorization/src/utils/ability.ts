@@ -1,8 +1,10 @@
-const { Ability } = require('@casl/ability');
-const { get } = require('lodash')
+import { Ability } from '@casl/ability';
+import { get } from 'lodash';
 
-const services = require('../../common/js/services');
-const logger = require('../../common/js/logger');
+// @ts-ignore
+import * as services from '../../common/js/services';
+// @ts-ignore
+import { logger } from '../../common/js/logger';
 const constants = require('./constants')
 
 function reducePermissionsFromRoles(roles) {
@@ -12,11 +14,11 @@ function reducePermissionsFromRoles(roles) {
             const reducedPermission = {
                 subject: get(permission, 'subject.name'),
                 actions: get(permission, 'actions'),
+                conditions: {}
             }
             // Add the condition if it exists
             const conditionFieldName = get(permission, 'subject.conditionFieldName')
             if (conditionFieldName) {
-                reducedPermission.conditions = {};
                 reducedPermission.conditions[conditionFieldName] = role.userId;
             }
 
@@ -65,7 +67,7 @@ async function getSubjectInstance(subject, id) {
     return subjectInstance;
 }
 
-function canBySubject(params) {
+export function canBySubject(params) {
     const { roles, userId, action, subject } = params;
     const permissions = reducePermissionsFromRoles(roles);
     const ability = new Ability(permissions, { subjectName })
@@ -79,7 +81,7 @@ function canBySubject(params) {
     return hasAbility;
 }
 
-async function canBySubjectInstance(params) {
+export async function canBySubjectInstance(params) {
     const { roles, userId, action, subject, subjectId } = params;
     const permissions = reducePermissionsFromRoles(roles);
     const ability = new Ability(permissions, { subjectName })
@@ -100,10 +102,4 @@ async function canBySubjectInstance(params) {
             payload: { userId, action, subject, subjectId }
         })
     }
-}
-
-
-module.exports = {
-    canBySubject,
-    canBySubjectInstance
 }

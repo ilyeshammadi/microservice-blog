@@ -1,5 +1,5 @@
 const events = require('../common/js/events');
-const logger = require('../common/js/logger');
+const { logger } = require('../common/js/logger');
 const { Broker } = require('../common/js/broker');
 const handlers = require('./handlers')
 

@@ -1,4 +1,4 @@
-const logger = require('../common/js/logger');
+const { logger } = require('../common/js/logger');
 const events = require('../common/js/events')
 const { Broker } = require('../common/js/broker')
 const { Article } = require('./models')

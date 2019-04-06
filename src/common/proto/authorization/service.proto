@@ -4,6 +4,7 @@ service Service {
     rpc Can(CanRequest) returns (CanResponse) {}
     rpc CanOnInstance(CanOnInstanceRequest) returns (CanOnInstanceResponse) {}
     rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {};
+    rpc GetRole(GetRoleRequest) returns (GetRoleResponse) {};
 }
 
 message Role {
@@ -41,5 +42,13 @@ message CreateRoleRequest {
 }
 
 message CreateRoleResponse {
+    Role role = 1;
+}
+
+message GetRoleRequest {
+    string userId = 1;
+}
+
+message GetRoleResponse {
     Role role = 1;
 }

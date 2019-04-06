@@ -1,4 +1,4 @@
-const logger = require('../common/js/logger');
+const { logger } = require('../common/js/logger');
 const { Comment } = require('./models')
 
 async function list({ query, paginator }) {
