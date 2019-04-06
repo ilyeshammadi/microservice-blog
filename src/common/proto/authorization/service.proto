@@ -4,13 +4,24 @@ service Service {
     rpc Can(CanRequest) returns (CanResponse) {}
     rpc CanOnInstance(CanOnInstanceRequest) returns (CanOnInstanceResponse) {}
     rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {};
-    rpc GetRole(GetRoleRequest) returns (GetRoleResponse) {};
+    rpc GetRoles(GetRolesRequest) returns (GetRolesResponse) {};
+}
+
+message Subject {
+    string name = 1;
+    string conditionFieldName = 2;
+}
+
+message Permission {
+    Subject subject = 1;
+    repeated string actions = 2;
 }
 
 message Role {
     string id = 1;
     string userId = 2;
     string type = 3;
+    repeated Permission permissions = 4;
 }
 
 message CanRequest {
@@ -45,10 +56,10 @@ message CreateRoleResponse {
     Role role = 1;
 }
 
-message GetRoleRequest {
-    string userId = 1;
+message GetRolesRequest {
+    required string userId = 1;
 }
 
-message GetRoleResponse {
-    Role role = 1;
+message GetRolesResponse {
+    repeated Role roles = 1;
 }

@@ -6,6 +6,23 @@ module.exports = gql`
     username: String
     articles(paginator: Paginator): [Article]
     comments(paginator: Paginator): [Comment]
+    roles: [Role]
+  }
+
+  type Role {
+    id: ID!
+    type: String!
+    permissions: [Permission]
+  }
+
+  type Permission {
+    subject: Subject!
+    actions: [String]
+  }
+
+  type Subject {
+    name: String!
+    conditionFieldName: String
   }
 
   type Article {

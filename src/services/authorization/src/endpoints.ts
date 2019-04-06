@@ -20,3 +20,14 @@ export async function createRole(call, callback) {
         }, null)
     }
 }
+
+export async function getRoles(call, callback) {
+    try {
+        callback(null, await handlers.getRoles(call.request))
+    } catch (error) {
+        callback({
+            code: grpc.status.NOT_FOUND,
+            message: "roles not found"
+        }, null)
+    }
+}

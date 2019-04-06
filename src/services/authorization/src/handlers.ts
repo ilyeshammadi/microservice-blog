@@ -55,3 +55,19 @@ export async function createRole(request) {
         return { role };
     }
 }
+
+export async function getRoles({ userId }: { userId: string }) {
+    try {
+        const roles = await Role.find({ userId });
+        logger.info({
+            message: 'fetched roles',
+            payload: { userId }
+        })
+        return { roles };
+    } catch (error) {
+        logger.error({
+            message: 'can not find roles',
+            payload: { userId }
+        })
+    }
+}

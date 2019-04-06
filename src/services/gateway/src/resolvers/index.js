@@ -1,4 +1,5 @@
 const Mutation = require('./mutation');
+const User = require('./types/user');
 
 module.exports = {
     Comment: {
@@ -9,10 +10,7 @@ module.exports = {
         author: ({ authorId }, _, { dataSources: { users } }) => users.get({ id: authorId }),
         comments: ({ id }, { paginator }, { dataSources: { comments } }) => comments.list({ query: { articleId: id }, paginator }),
     },
-    User: {
-        articles: ({ id }, { paginator }, { dataSources: { articles } }) => articles.list({ query: { authorId: id }, paginator }),
-        comments: ({ id }, { paginator }, { dataSources: { comments } }) => comments.list({ query: { authorId: id }, paginator }),
-    },
+    User,
     Query: {
         user: (_, args, { dataSources: { users } }) => users.get(args),
         article: (_, args, { dataSources: { articles } }) => articles.get(args),

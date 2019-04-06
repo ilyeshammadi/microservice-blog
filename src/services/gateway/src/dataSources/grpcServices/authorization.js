@@ -30,4 +30,13 @@ module.exports = class GRPCService extends RESTDataSource {
         if (!res.yes) throw new ForbiddenError('permission error')
     }
 
+    async getRoles(request) {
+        return await new Promise((resolve, reject) => {
+            this.client.getRoles(request, (err, res) => {
+                if (err) reject(err);
+                resolve(res.roles);
+            });
+        });
+    }
+
 }
