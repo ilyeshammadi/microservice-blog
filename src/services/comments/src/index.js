@@ -1,17 +1,8 @@
-const start = process.argv[2];
+const { Service } = require('../common/js/service');
+const endpoints = require('./endpoints.js')
+const events = require('./events');
 
-if (start === 'grpc') {
-    const grpc = require('../common/js/grpc')
-    const service = require('./endpoints.js')
-
-    const PROTO_PATH = './common/proto/comments/service.proto';
-
-    new grpc.Server({
-        protoFilePath: PROTO_PATH,
-        service
-    }).start();
-
-} else if (start === 'subscriber') {
-    const { broker } = require('./events');
-    broker.subscribe('commentsService');
-}
+new Service('comments', {
+    endpoints,
+    events
+}).start()

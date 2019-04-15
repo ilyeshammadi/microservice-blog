@@ -1,5 +1,5 @@
 // @ts-ignore
-import { logger } from '../common/js/logger';
+import { logger } from '../common/js/tools';
 import { canBySubject, canBySubjectInstance } from './utils/ability';
 const { Role } = require('./models')
 

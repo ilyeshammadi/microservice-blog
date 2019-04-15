@@ -1,7 +1,7 @@
 import {
-    getUsersServiceClient
+    createGrpcClient
     // @ts-ignore
-} from '../../common/js/services';
+} from '../../common/js/tools';
 
 export function generateToken(): string {
     var text = "";
@@ -14,7 +14,7 @@ export function generateToken(): string {
 }
 
 export async function getLoggedinUser(username: string, password: string) {
-    const usersServiceClient = getUsersServiceClient();
+    const usersServiceClient = createGrpcClient('users');
     const call = usersServiceClient.list({ query: { username, password } })
     const user = await new Promise((resolve, reject) => {
         let foundUser;
@@ -29,7 +29,7 @@ export async function getLoggedinUser(username: string, password: string) {
 
 
 export async function getUserById(id: string) {
-    const usersServiceClient = getUsersServiceClient();
+    const usersServiceClient = createGrpcClient('users');
     return await new Promise((resolve, reject) => {
         usersServiceClient.get({ id }, (err, res) => {
             if (err) reject(err)

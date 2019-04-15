@@ -1,12 +1,11 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
-
-const services = require('../../../common/js/services')
+const { createGrpcClient } = require('../../../common/js/tools');
 
 module.exports = class GRPCService extends RESTDataSource {
 
     constructor(params) {
         super(params);
-        this.client = services.getArticlesServiceClient();
+        this.client = createGrpcClient('articles');
     }
 
     async list(request) {

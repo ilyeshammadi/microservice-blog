@@ -1,9 +1,6 @@
-const grpc = require('../common/js/grpc')
-const service = require('./endpoints.js')
+const { Service } = require('../common/js/service');
+const endpoints = require('./endpoints.js')
 
-const PROTO_PATH = './common/proto/articles/service.proto';
-
-new grpc.Server({
-    protoFilePath: PROTO_PATH,
-    service
-}).start();
+new Service('articles', {
+    endpoints,
+}).start()

@@ -1,13 +1,12 @@
 const { ApolloError } = require('apollo-server')
 const { RESTDataSource } = require('apollo-datasource-rest');
-
-const services = require('../../../common/js/services')
+const { createGrpcClient } = require('../../../common/js/tools');
 
 module.exports = class GRPCService extends RESTDataSource {
 
     constructor(params) {
         super(params);
-        this.client = services.getUsersServiceClient();
+        this.client = createGrpcClient('users');
     }
 
     async list(request) {

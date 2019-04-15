@@ -1,9 +1,5 @@
-const { logger } = require('../common/js/logger');
-const events = require('../common/js/events')
-const { Broker } = require('../common/js/broker')
+const { logger, events, emitEvent } = require('../common/js/tools');
 const { Article } = require('./models')
-
-const broker = new Broker();
 
 async function list({ query, paginator }) {
 
@@ -124,7 +120,7 @@ async function remove({ id }) {
         article.remove();
 
         // Publish the event
-        broker.publish(events.ARTICLE_DELETED, { id })
+        emitEvent(events.ARTICLE_DELETED, { id })
 
         logger.info({
             message: "article deleted",

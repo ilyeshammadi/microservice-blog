@@ -1,13 +1,12 @@
 const { ForbiddenError } = require('apollo-server');
 const { RESTDataSource } = require('apollo-datasource-rest');
-
-const services = require('../../../common/js/services')
+const { createGrpcClient } = require('../../../common/js/tools');
 
 module.exports = class GRPCService extends RESTDataSource {
 
     constructor(params) {
         super(params);
-        this.client = services.getAuthorizationServiceClient();
+        this.client = createGrpcClient('authorization');
     }
 
     async can(request) {

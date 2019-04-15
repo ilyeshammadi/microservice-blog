@@ -2,9 +2,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "nodemon src/index.js grpc",
-		"start:prod": "node src/index.js",
-		"start-subscriber": "nodemon src/index.js subscriber",
-		"start-subscriber:prod": "node src/index.js subscriber"
+		"start:prod": "node src/index.js"
 	},
 	"dependencies": {
 		"@grpc/proto-loader": "^0.4.0",

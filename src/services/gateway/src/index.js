@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const { RedisCache } = require('apollo-server-cache-redis');
 
-const { logger } = require('../common/js/logger')
+const { logger } = require('../common/js/tools')
 const resolvers = require('./resolvers');
 const typeDefs = require('./typeDefs');
 

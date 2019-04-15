@@ -1,5 +1,5 @@
 // @ts-ignore
-import { logger } from '../common/js/logger';
+import { logger } from '../common/js/tools';
 import { generateToken, getLoggedinUser, getUserById } from './utils/index'
 import { Auth } from './models';
 

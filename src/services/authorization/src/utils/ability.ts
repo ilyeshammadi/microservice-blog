@@ -1,11 +1,13 @@
 import { Ability } from '@casl/ability';
 import { get } from 'lodash';
 
+import {
+    createGrpcClient
+    // @ts-ignore
+} from '../../common/js/tools';
 // @ts-ignore
-import * as services from '../../common/js/services';
-// @ts-ignore
-import { logger } from '../../common/js/logger';
-const constants = require('./constants')
+import { logger } from '../../common/js/tools';
+import * as constants from './constants';
 
 function reducePermissionsFromRoles(roles) {
     const permissions = [];
@@ -40,7 +42,7 @@ function subjectt(name, object) {
 async function getSubjectInstance(subject, id) {
     let subjectInstance;
     if (subject === constants.SUBJECTS.article.name) {
-        const client = services.getArticlesServiceClient();
+        const client = createGrpcClient('articles');
         subjectInstance = await new Promise((reslove, reject) => {
             client.get({ id }, (err, res) => {
                 if (err) reject(err)
@@ -48,7 +50,7 @@ async function getSubjectInstance(subject, id) {
             });
         });
     } else if (subject === constants.SUBJECTS.comment.name) {
-        const client = services.getCommentsServiceClient();
+        const client = createGrpcClient('comments');
         subjectInstance = await new Promise((reslove, reject) => {
             client.get({ id }, (err, res) => {
                 if (err) reject(err)
@@ -56,7 +58,7 @@ async function getSubjectInstance(subject, id) {
             });
         });
     } else if (subject === constants.SUBJECTS.user.name) {
-        const client = services.getUsersServiceClient();
+        const client = createGrpcClient('users');
         subjectInstance = await new Promise((reslove, reject) => {
             client.get({ id }, (err, res) => {
                 if (err) reject(err)
