@@ -3,7 +3,7 @@ const amqpCallbackAPI = require('amqplib/callback_api');
 
 const { logger } = require('./logger.tool');
 
-const brokerUrl = process.env.AMQP_URL || 'amqp://rabbitmq';
+const brokerUrl = process.env.AMQP_URL || 'amqp://admin:adminpassword@rabbitmq.dbs.svc.cluster.local:5672';
 const exchange = 'main';
 
 function startRabbitMQConsumer(events, queue = '') {

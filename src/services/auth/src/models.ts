@@ -1,6 +1,8 @@
 import { connect, model, Schema } from 'mongoose';
 
-connect('mongodb://mongo/auth', { useNewUrlParser: true });
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://mongodb.dbs.svc.cluster.local';
+
+connect(`${MONGODB_URL}/auth`, { useNewUrlParser: true });
 
 const AuthSchema = new Schema({
     token: {

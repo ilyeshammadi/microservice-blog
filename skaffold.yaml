@@ -1,0 +1,138 @@
+apiVersion: skaffold/v1beta8
+kind: Config
+build:
+  artifacts:
+    - image: gcr.io/blogo/gateway
+      context: src
+      sync:
+        "services/gateway/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/gateway/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: gateway
+    - image: gcr.io/blogo/auth
+      context: src
+      sync:
+        "services/auth/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/auth/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: auth
+    - image: gcr.io/blogo/authorization
+      context: src
+      sync:
+        "services/authorization/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/authorization/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: authorization
+    - image: gcr.io/blogo/users
+      context: src
+      sync:
+        "services/users/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/users/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: users
+    - image: gcr.io/blogo/articles
+      context: src
+      sync:
+        "services/articles/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/articles/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: articles
+    - image: gcr.io/blogo/comments
+      context: src
+      sync:
+        "services/comments/src/***/*": src/
+        "common/***/*": common/
+      docker:
+        dockerfile: services/comments/Dockerfile.skaffold
+        buildArgs:
+          SERVICE: comments
+deploy:
+  helm:
+    releases:
+      - name: gateway
+        chartPath: deploy/charts/gateway
+        values:
+          image: gcr.io/blogo/gateway
+        imageStrategy:
+          helm: {}
+      - name: auth
+        chartPath: deploy/charts/auth
+        values:
+          image: gcr.io/blogo/auth
+        imageStrategy:
+          helm: {}
+      - name: authorization
+        chartPath: deploy/charts/authorization
+        values:
+          image: gcr.io/blogo/authorization
+        imageStrategy:
+          helm: {}
+      - name: users
+        chartPath: deploy/charts/users
+        values:
+          image: gcr.io/blogo/users
+        imageStrategy:
+          helm: {}
+      - name: articles
+        chartPath: deploy/charts/articles
+        values:
+          image: gcr.io/blogo/articles
+        imageStrategy:
+          helm: {}
+      - name: comments
+        chartPath: deploy/charts/comments
+        values:
+          image: gcr.io/blogo/comments
+        imageStrategy:
+          helm: {}
+
+profiles:
+  - name: prod
+    build:
+      artifacts:
+        - image: gcr.io/blogo/gateway
+          context: src
+          docker:
+            dockerfile: services/gateway/Dockerfile
+            buildArgs:
+              SERVICE: gateway
+        - image: gcr.io/blogo/auth
+          context: src
+          docker:
+            dockerfile: services/auth/Dockerfile
+            buildArgs:
+              SERVICE: auth
+        - image: gcr.io/blogo/authorization
+          context: src
+          docker:
+            dockerfile: services/authorization/Dockerfile
+            buildArgs:
+              SERVICE: authorization
+        - image: gcr.io/blogo/users
+          context: src
+          docker:
+            dockerfile: services/users/Dockerfile
+            buildArgs:
+              SERVICE: users
+        - image: gcr.io/blogo/articles
+          context: src
+          docker:
+            dockerfile: services/articles/Dockerfile
+            buildArgs:
+              SERVICE: articles
+        - image: gcr.io/blogo/comments
+          context: src
+          docker:
+            dockerfile: services/comments/Dockerfile
+            buildArgs:
+              SERVICE: comments

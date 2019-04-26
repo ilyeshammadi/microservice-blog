@@ -36,7 +36,7 @@ async function create({ username, password }) {
     const message = 'could not create user';
     try {
         // Check if the user already exists
-        if (User.find({ username, password })) throw Error(message);
+        // if (User.find({ username, password })) throw Error(message);
         const user = new User({ username, password });
         user.save({ username, password });
         logger.info({

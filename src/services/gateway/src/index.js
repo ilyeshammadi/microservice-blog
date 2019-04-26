@@ -14,6 +14,8 @@ const {
 } = require('./dataSources')
 
 
+const REDIS_URL = process.env.REDIS_URL || 'redis://redis-master.dbs.svc.cluster.local'
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -30,9 +32,10 @@ const server = new ApolloServer({
     return { token };
   },
   cache: new RedisCache({
-    host: 'redis'
+    url: REDIS_URL
   }),
 });
+
 
 server.listen().then(({ url }) => {
   logger.info(`🚀 GraphQL server ready at ${url}`);

@@ -3,7 +3,9 @@ import * as mongoosePaginate from 'mongoose-paginate';
 
 import * as constants from './utils/constants';
 
-connect('mongodb://mongo/authorization', { useNewUrlParser: true });
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://mongodb.dbs.svc.cluster.local';
+
+connect(`${MONGODB_URL}/authorization`, { useNewUrlParser: true });
 
 const subjectsEnum = Object.values(constants.SUBJECTS);
 const actionsEnum = Object.values(constants.ACTIONS);
