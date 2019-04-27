@@ -1,8 +1,9 @@
 {
 	"main": "index.js",
 	"scripts": {
+		"build": "tsc",
 		"start": "npx nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
-		"start:prod": "node src/index.js"
+		"start:prod": "node dist/index.js"
 	},
 	"dependencies": {
 		"@casl/ability": "^3.0.1",

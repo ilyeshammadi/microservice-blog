@@ -1,8 +1,9 @@
 {
 	"main": "index.js",
 	"scripts": {
+		"build": "tsc",
 		"start": "npx nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
-		"start:prod": "node build/index.js"
+		"start:prod": "node dist/index.js"
 	},
 	"dependencies": {
 		"@grpc/proto-loader": "^0.4.0",

@@ -1,7 +1,9 @@
 {
 	"scripts": {
-		"compose": "docker-compose -f deploy/docker-compose/dev.yaml up --build",
-		"compose:prod": "docker-compose -f deploy/docker-compose/prod.yaml up --build"
+		"compose:dev": "docker-compose -f deploy/docker-compose/dev.yaml up --build",
+		"compose": "docker-compose -f deploy/docker-compose/prod.yaml up --build",
+		"k8s": "skaffold run -p prod",
+		"k8s:dev": "skaffold dev"
 	},
 	"devDependencies": {
 		"grpcc": "^1.1.3"

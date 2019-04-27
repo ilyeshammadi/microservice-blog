@@ -1,7 +1,15 @@
 {
 	"compilerOptions": {
-		"rootDir": "src",
-		"outDir": "build",
-		"target": "es2018",
+		"module": "commonjs",
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "es6",
+		"sourceMap": true,
+		"outDir": "./dist",
+		"baseUrl": "./"
 	},
+	"exclude": [
+		"node_modules"
+	]
 }

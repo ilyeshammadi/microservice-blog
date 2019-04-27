@@ -459,3 +459,6 @@ ASALocalRun/
 healthchecksdb
 
 # End of https://www.gitignore.io/api/visualstudio,visualstudiocod,go,godot,node,react
+
+
+**/build
