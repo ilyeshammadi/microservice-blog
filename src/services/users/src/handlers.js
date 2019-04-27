@@ -1,5 +1,7 @@
-const { logger } = require('../common/js/tools');
+const { logger, grpcClients } = require('../common/js/tools');
 const { User } = require('./models')
+
+const authorization = grpcClients.authorization;
 
 async function list({ query, paginator }) {
     try {
@@ -36,13 +38,31 @@ async function create({ username, password }) {
     const message = 'could not create user';
     try {
         // Check if the user already exists
-        // if (User.find({ username, password })) throw Error(message);
+        const found = await User.find({ username });
+        if (found.length !== 0) throw Error(message);
+        // Create a new user
         const user = new User({ username, password });
         user.save({ username, password });
         logger.info({
             message: `${username} has joined the ship 🕺`,
             payload: { endpoint: 'create' }
         });
+
+        // Create the user role, if error delete the user
+        try {
+            const createRoleRequest = { userId: user.id, type: 'user' };
+            await new Promise((resolve, reject) => {
+                authorization.createRole(createRoleRequest, (err, res) => {
+                    if (err) reject(err);
+                    resolve(res);
+                })
+            });
+        } catch (error) {
+            // If error, delete the created user
+            await User.deleteOne({ id: user.id });
+            throw new Error('could not create role');
+        }
+
         return { user };
     } catch (error) {
         logger.error({

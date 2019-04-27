@@ -1,7 +1,8 @@
 // @ts-ignore
 import { logger } from '../common/js/tools';
 import { canBySubject, canBySubjectInstance } from './utils/ability';
-const { Role } = require('./models')
+import { CreateRole } from './interfaces';
+import { Role } from './models';
 
 export async function can(request) {
     try {
@@ -35,7 +36,7 @@ export async function canOnInstance(request) {
     }
 }
 
-export async function createRole(request) {
+export async function createRole(request: CreateRole) {
     const { userId, type } = request;
     // Check if there is an existing role with the combination of userId and type
     const existingRole = await Role.findOne({ userId, type });
@@ -49,9 +50,17 @@ export async function createRole(request) {
     }
     if (type === 'user') {
         const role = await Role.newUserRole(userId);
+        logger.info({
+            message: "user role created",
+            payload: { userId }
+        })
         return { role };
     } else if (type === 'admin') {
         const role = await Role.newAdminRole(userId);
+        logger.info({
+            message: "admin role created",
+            payload: { userId }
+        })
         return { role };
     }
 }
