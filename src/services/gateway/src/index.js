@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 const { RedisCache } = require('apollo-server-cache-redis');
+require('dotenv').config();
 
 const { logger } = require('../common/js/tools')
 const resolvers = require('./resolvers');
@@ -13,8 +14,7 @@ const {
   CommentsGRPCService,
 } = require('./dataSources')
 
-
-const REDIS_URL = process.env.REDIS_URL || 'redis://redis-master.dbs.svc.cluster.local'
+const REDIS_URL = process.env.REDIS_URL;
 
 const server = new ApolloServer({
   typeDefs,

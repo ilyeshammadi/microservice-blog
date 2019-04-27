@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://mongodb.dbs.svc.cluster.local';
+const MONGODB_URL = process.env.MONGODB_URL;
+
+console.log(MONGODB_URL)
 
 mongoose.connect(`${MONGODB_URL}/articles`, { useNewUrlParser: true });
 

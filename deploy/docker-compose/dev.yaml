@@ -18,6 +18,10 @@ services:
       - ../../src/services/gateway/src:/src/services/gateway/src
     ports:
       - "4000:4000"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
+      - REDIS_URL=redis://redis
     depends_on:
       - auth
       - articles
@@ -36,6 +40,9 @@ services:
       - ../../src/services/auth/src:/src/services/auth/src
     ports:
       - "50050:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - users
       - mongo
@@ -52,6 +59,9 @@ services:
       - ../../src/services/authorization/src:/src/services/authorization/src
     ports:
       - "50051:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
       - users
@@ -70,6 +80,9 @@ services:
       - ../../src/services/users/src:/src/services/users/src
     ports:
       - "50052:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
 
@@ -85,6 +98,9 @@ services:
       - ../../src/services/articles/src:/src/services/articles/src
     ports:
       - "50053:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
 
@@ -100,6 +116,9 @@ services:
       - ../../src/services/comments/src:/src/services/comments/src
     ports:
       - "50054:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
       - rabbitmq

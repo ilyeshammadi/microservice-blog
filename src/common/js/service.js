@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 class Service {
     constructor(name, config) {
         this.name = name;
