@@ -86,24 +86,6 @@ services:
     depends_on:
       - mongo
 
-  articles:
-    build:
-      context: ../../src
-      dockerfile: services/articles/Dockerfile.dev
-      args:
-        SERVICE: articles
-    restart: always
-    volumes:
-      - ../../src/common:/src/services/articles/common
-      - ../../src/services/articles/src:/src/services/articles/src
-    ports:
-      - "50053:50050"
-    environment:
-      - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
-    depends_on:
-      - mongo
-
   comments:
     build:
       context: ../../src
@@ -122,6 +104,25 @@ services:
     depends_on:
       - mongo
       - rabbitmq
+
+  articles:
+    build:
+      context: ../../src
+      dockerfile: services/articles/Dockerfile.dev
+      args:
+        SERVICE: articles
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/articles/common
+      - ../../src/services/articles/src:/src/services/articles/src
+    ports:
+      - "50055:3000"
+      - "50056:50050"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo

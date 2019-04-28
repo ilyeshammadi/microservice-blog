@@ -27,16 +27,21 @@ spec:
             - name: grpc
               containerPort: 50050
               protocol: TCP
-          # TODO: Add livenessProbe and readinessProbe for gRPC
-          # Link: https://github.com/grpc-ecosystem/grpc-health-probe
-          # readinessProbe:
-          #   exec:
-          #     command: ["/bin/grpc_health_probe", "-addr=:5000"]
-          #   initialDelaySeconds: 5
-          # livenessProbe:
-          #   exec:
-          #     command: ["/bin/grpc_health_probe", "-addr=:5000"]
-          #   initialDelaySeconds: 10
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

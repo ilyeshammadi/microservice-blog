@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-service Service {
+package service;
+
+service ServiceController {
     rpc List(ListRequest) returns (stream Comment) {}
     rpc Get(GetRequest) returns (Comment) {}
     rpc Create (CreateRequest) returns (CreateReponse) {};

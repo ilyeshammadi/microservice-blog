@@ -6,6 +6,7 @@
 		"k8s:dev": "skaffold dev"
 	},
 	"devDependencies": {
-		"grpcc": "^1.1.3"
+		"grpcc": "^1.1.3",
+		"nest": "^0.1.6"
 	}
 }

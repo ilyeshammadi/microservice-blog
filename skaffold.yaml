@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta8
+apiVersion: skaffold/v1beta9
 kind: Config
 build:
   artifacts:
@@ -44,7 +44,7 @@ build:
         "services/articles/src/***/*": src/
         "common/***/*": common/
       docker:
-        dockerfile: services/articles/Dockerfile.skaffold
+        dockerfile: services/articles/Dockerfile.dev
         buildArgs:
           SERVICE: articles
     - image: gcr.io/blogo/comments
