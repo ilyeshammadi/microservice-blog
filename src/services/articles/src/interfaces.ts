@@ -2,12 +2,12 @@ interface Query {
   authorId?: string;
 }
 
-interface Paginator {
+interface Paginate {
   page?: number;
   limit?: number;
 }
 
 export interface ListRequest {
   query?: Query;
-  paginator?: Paginator;
+  paginate?: Paginate;
 }

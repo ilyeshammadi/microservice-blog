@@ -6,16 +6,16 @@ import { ListRequest } from './interfaces';
 @Injectable()
 export class Service {
   async list(
-    { query, paginator }: ListRequest = { paginator: { limit: 100, page: 1 } },
+    { query, paginate }: ListRequest = { paginate: { limit: 100, page: 1 } },
   ) {
     try {
       // Get the list of articles
-      const { docs } = await Article.paginate(query, paginator);
+      const { docs } = await Article.paginate(query, paginate);
 
       logger.info({
         message: 'articles fetched',
         payload: {
-          args: { query, paginator },
+          args: { query, paginate },
           endpoint: 'list',
         },
       });
@@ -26,7 +26,7 @@ export class Service {
         error,
         message: 'invalid arguments',
         payload: {
-          args: { query, paginator },
+          args: { query, paginate },
           endpoint: 'list',
         },
       });

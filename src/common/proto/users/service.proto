@@ -32,12 +32,12 @@ message Query {
     string password = 2;
 }
 
-message Paginator {
+message Paginate {
     int32 page = 1 [default = 1];
     int32 limit = 2 [default = 10];
 }
 
 message ListRequest {
     Query query = 1 ;
-    Paginator paginator = 2;
+    Paginate paginate = 2;
 }

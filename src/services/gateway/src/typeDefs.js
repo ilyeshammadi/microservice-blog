@@ -1,11 +1,11 @@
-const { gql } = require('apollo-server');
+const { gql } = require("apollo-server");
 
 module.exports = gql`
   type User {
     id: ID!
     username: String
-    articles(paginator: Paginator): [Article]
-    comments(paginator: Paginator): [Comment]
+    articles(paginate: Paginate): [Article]
+    comments(paginate: Paginate): [Comment]
     roles: [Role]
   }
 
@@ -31,7 +31,7 @@ module.exports = gql`
     content: String
     authorId: String
     author: User!
-    comments(paginator: Paginator): [Comment]
+    comments(paginate: Paginate): [Comment]
   }
 
   type Comment {
@@ -43,11 +43,11 @@ module.exports = gql`
     article: Article
   }
 
-  input Paginator {
+  input Paginate {
     page: Int
     limit: Int
   }
-  
+
   input LoginInput {
     username: String!
     password: String!
@@ -61,7 +61,6 @@ module.exports = gql`
     id: ID
     username: String
   }
-
 
   type CreateArticleResponse {
     article: Article
@@ -125,23 +124,35 @@ module.exports = gql`
 
   type Query {
     user(id: ID!): User
-    users(paginator: Paginator): [User]
+    users(paginate: Paginate): [User]
     article(id: ID!): Article
-    articles(paginator: Paginator): [Article]
+    articles(paginate: Paginate): [Article]
     comment(id: ID!): Comment
-    comments(paginator: Paginator): [Comment]
+    comments(paginate: Paginate): [Comment]
   }
 
   type Mutation {
     login(loginInput: LoginInput!): LoginResponse
     register(registerInput: RegisterInput!): RegisterResponse
-    
-    createArticle(createArticleInput: CreateArticleInput!): CreateArticleResponse
-    updateArticle(updateArticleInput: UpdateArticleInput!): UpdateArticleResponse
-    deleteArticle(deleteArticleInput: DeleteArticleInput!): DeleteArticleResponse
 
-    createComment(createCommentInput: CreateCommentInput!): CreateCommentResponse
-    updateComment(updateCommentInput: UpdateCommentInput!): UpdateCommentResponse
-    deleteComment(deleteCommentInput: DeleteCommentInput!): DeleteCommentResponse
+    createArticle(
+      createArticleInput: CreateArticleInput!
+    ): CreateArticleResponse
+    updateArticle(
+      updateArticleInput: UpdateArticleInput!
+    ): UpdateArticleResponse
+    deleteArticle(
+      deleteArticleInput: DeleteArticleInput!
+    ): DeleteArticleResponse
+
+    createComment(
+      createCommentInput: CreateCommentInput!
+    ): CreateCommentResponse
+    updateComment(
+      updateCommentInput: UpdateCommentInput!
+    ): UpdateCommentResponse
+    deleteComment(
+      deleteCommentInput: DeleteCommentInput!
+    ): DeleteCommentResponse
   }
-`; 
+`;
