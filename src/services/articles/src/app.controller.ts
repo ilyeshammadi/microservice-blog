@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { from } from 'rxjs';
-import { Service } from './service';
+import { Service } from './app.service';
 
 @Controller()
 export class GrpcService {

@@ -462,5 +462,5 @@ healthchecksdb
 
 build/
 dist/
-**/build
-**/dist
+**/build/
+**/dist/

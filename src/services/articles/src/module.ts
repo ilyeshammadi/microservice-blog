@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GrpcService } from './app.controller';
 import HealthCheckController from './health-check.controller';
-import { Service } from './service';
+import { Service } from './app.service';
 
 @Module({
   imports: [],

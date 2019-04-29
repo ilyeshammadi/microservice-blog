@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { emitEvent, events, logger } from '../common/js/tools';
 import { Article } from './interfaces/article.interface';
-import { Article as ArticleModel } from './models';
+import { Article as ArticleModel } from './app.models';
 import { ListDto } from './dto/list.dto';
 import { GetDto } from './dto/get.dto';
 import { CreateDto } from './dto/create.dto';
