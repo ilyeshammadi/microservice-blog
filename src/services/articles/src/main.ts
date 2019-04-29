@@ -1,7 +1,8 @@
 require('dotenv').config();
-import { join } from 'path';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ClientOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 import { AppModule } from './module';
 
 const grpcOptions: ClientOptions = {
@@ -16,6 +17,12 @@ const grpcOptions: ClientOptions = {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.connectMicroservice(grpcOptions);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   await app.startAllMicroservicesAsync();
   await app.listen(3000);
 }

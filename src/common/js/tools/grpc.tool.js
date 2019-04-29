@@ -13,7 +13,7 @@ function startGrpcServer(config) {
   const serviceProto = grpc.loadPackageDefinition(serviceDefinition);
   const server = new grpc.Server();
 
-  server.addService(serviceProto.service.ServiceController.service, service);
+  server.addService(serviceProto.service.GrpcService.service, service);
   server.bind(serviceAddress, grpc.ServerCredentials.createInsecure());
   logger.info(`🥑 gRPC server running at ${serviceAddress}`);
   server.start();
@@ -25,7 +25,7 @@ function createGrpcClient(serviceName, { servicePort, protoPath } = {}) {
   const SERVICE_ADDRESS = `${serviceName}:${port}`;
   const packageDefinition = protoLoader.loadSync(PROTO_PATH);
   const service = grpc.loadPackageDefinition(packageDefinition);
-  return new service.service.ServiceController(
+  return new service.service.GrpcService(
     SERVICE_ADDRESS,
     grpc.credentials.createInsecure()
   );

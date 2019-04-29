@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package service;
 
-service ServiceController {
+service GrpcService {
     rpc List(ListRequest) returns (stream User) {}
     rpc Get(GetRequest) returns (User) {}
     rpc Create (CreateRequest) returns (CreateResponse);

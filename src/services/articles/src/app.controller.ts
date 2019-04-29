@@ -1,11 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
-import { Service } from './service';
+import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { from, forkJoin, asyncScheduler } from 'rxjs';
+import { from } from 'rxjs';
+import { Service } from './service';
 
 @Controller()
-export class ServiceController {
-  constructor(private readonly service: Service) {}
+export class GrpcService {
+  constructor(private readonly service: Service) { }
 
   @GrpcMethod()
   async list(request) {

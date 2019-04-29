@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { logger, events, emitEvent } from '../common/js/tools';
-import { Article } from './models';
-import { ListRequest } from './interfaces';
+import { emitEvent, events, logger } from '../common/js/tools';
+import { Article } from './interfaces/article.interface';
+import { Article as ArticleModel } from './models';
+import { ListDto } from './dto/list.dto';
+import { GetDto } from './dto/get.dto';
+import { CreateDto } from './dto/create.dto';
+import { UpdateDto } from './dto/update.dto';
+import { DeleteDto } from './dto/delete.dto';
 
 @Injectable()
 export class Service {
-  async list(
-    { query, paginate }: ListRequest = { paginate: { limit: 100, page: 1 } },
-  ) {
+  async list({ query, paginate }: ListDto): Promise<Article[]> {
     try {
       // Get the list of articles
-      const { docs } = await Article.paginate(query, paginate);
+      const { docs } = await ArticleModel.paginate(query, paginate);
 
       logger.info({
         message: 'articles fetched',
@@ -34,12 +37,12 @@ export class Service {
     }
   }
 
-  async get({ id }) {
+  async get({ id }: GetDto): Promise<Article> {
     try {
       // Get one article
-      const article = await Article.findOne({ _id: id });
+      const article = await ArticleModel.findOne({ _id: id });
       // Throw error if not found
-      if (!article) throw Error();
+      if (!article) { throw Error(); }
       logger.info({
         message: 'article fetched',
         payload: {
@@ -60,14 +63,14 @@ export class Service {
     }
   }
 
-  async create(article) {
+  async create(createArticle: CreateDto): Promise<{ article: Article }> {
     try {
-      const articleModel = new Article(article);
+      const articleModel = new ArticleModel(createArticle);
       const articleCreated = await articleModel.save();
       logger.info({
         message: 'article created',
         payload: {
-          args: article,
+          args: createArticle,
           endpoint: 'create',
         },
       });
@@ -76,24 +79,24 @@ export class Service {
       logger.error({
         message: 'can not create article',
         payload: {
-          args: article,
+          args: createArticle,
           endpoint: 'create',
         },
       });
       throw Error(error);
     }
   }
-  async update(article) {
+  async update(updateArticleDto: UpdateDto): Promise<{ article: Article }> {
     try {
-      const query = { _id: article.id };
-      delete article.id;
-      await Article.findOneAndUpdate(query, article);
-      const articleUpdated = await Article.findOne(query);
+      const query = { _id: updateArticleDto.id };
+      delete updateArticleDto.id;
+      await ArticleModel.findOneAndUpdate(query, updateArticleDto);
+      const articleUpdated = await ArticleModel.findOne(query);
 
       logger.info({
         message: 'article updated',
         payload: {
-          args: article,
+          args: updateArticleDto,
           endpoint: 'update',
         },
       });
@@ -103,17 +106,17 @@ export class Service {
       logger.error({
         message: 'article not found',
         payload: {
-          args: article,
+          args: updateArticleDto,
           endpoint: 'update',
         },
       });
       throw Error(error);
     }
   }
-  async remove({ id }) {
+  async remove({ id }: DeleteDto): Promise<{ article: Article; ok: Boolean }> {
     try {
       const query = { _id: id };
-      const article = await Article.findOne(query);
+      const article = await ArticleModel.findOne(query);
       article.remove();
 
       // Publish the event

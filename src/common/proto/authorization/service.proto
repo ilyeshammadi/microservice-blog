@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package service;
 
-service ServiceController {
+service GrpcService {
     rpc Can(CanRequest) returns (CanResponse) {}
     rpc CanOnInstance(CanOnInstanceRequest) returns (CanOnInstanceResponse) {}
     rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {};
