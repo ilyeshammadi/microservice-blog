@@ -14,15 +14,6 @@ export class Service {
     try {
       // Get the list of articles
       const { docs } = await ArticleModel.paginate(query, paginate);
-
-      logger.info({
-        message: 'articles fetched',
-        payload: {
-          args: { query, paginate },
-          endpoint: 'list',
-        },
-      });
-
       return docs;
     } catch (error) {
       logger.error({
@@ -43,13 +34,6 @@ export class Service {
       const article = await ArticleModel.findOne({ _id: id });
       // Throw error if not found
       if (!article) { throw Error(); }
-      logger.info({
-        message: 'article fetched',
-        payload: {
-          args: { id },
-          endpoint: 'get',
-        },
-      });
       return article;
     } catch (error) {
       logger.error({
@@ -67,13 +51,6 @@ export class Service {
     try {
       const articleModel = new ArticleModel(createArticle);
       const articleCreated = await articleModel.save();
-      logger.info({
-        message: 'article created',
-        payload: {
-          args: createArticle,
-          endpoint: 'create',
-        },
-      });
       return { article: articleCreated };
     } catch (error) {
       logger.error({
@@ -92,15 +69,6 @@ export class Service {
       delete updateArticleDto.id;
       await ArticleModel.findOneAndUpdate(query, updateArticleDto);
       const articleUpdated = await ArticleModel.findOne(query);
-
-      logger.info({
-        message: 'article updated',
-        payload: {
-          args: updateArticleDto,
-          endpoint: 'update',
-        },
-      });
-
       return { article: articleUpdated };
     } catch (error) {
       logger.error({
@@ -121,15 +89,6 @@ export class Service {
 
       // Publish the event
       emitEvent(events.ARTICLE_DELETED, { id });
-
-      logger.info({
-        message: 'article deleted',
-        payload: {
-          args: { id },
-          endpoint: 'remove',
-        },
-      });
-
       return {
         article,
         ok: true,
