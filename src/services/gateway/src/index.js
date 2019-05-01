@@ -1,18 +1,18 @@
-const { ApolloServer } = require('apollo-server');
-const { RedisCache } = require('apollo-server-cache-redis');
-require('dotenv').config();
+const { ApolloServer } = require("apollo-server");
+const { RedisCache } = require("apollo-server-cache-redis");
+require("dotenv").config();
 
-const { logger } = require('../common/js/tools')
-const resolvers = require('./resolvers');
-const typeDefs = require('./typeDefs');
+const { logger } = require("../common/js/tools");
+const resolvers = require("./resolvers");
+const typeDefs = require("./typeDefs");
 
 const {
   AuthGRPCService,
   AuthorizationGRPCService,
   UsersGRPCService,
   ArticlesGRPCService,
-  CommentsGRPCService,
-} = require('./dataSources')
+  CommentsGRPCService
+} = require("./dataSources");
 
 const REDIS_URL = process.env.REDIS_URL;
 
@@ -28,14 +28,13 @@ const server = new ApolloServer({
   }),
   context: async ({ req }) => {
     // get the user token from the headers
-    const token = req.headers.authorization || '';
+    const token = req.headers.authorization || "";
     return { token };
   },
   cache: new RedisCache({
     url: REDIS_URL
-  }),
+  })
 });
-
 
 server.listen().then(({ url }) => {
   logger.info(`🚀 GraphQL server ready at ${url}`);

@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-service Service {
+package service;
+
+service GrpcService {
     rpc List(ListRequest) returns (stream User) {}
     rpc Get(GetRequest) returns (User) {}
     rpc Create (CreateRequest) returns (CreateResponse);
@@ -30,12 +32,12 @@ message Query {
     string password = 2;
 }
 
-message Paginator {
+message Paginate {
     int32 page = 1 [default = 1];
     int32 limit = 2 [default = 10];
 }
 
 message ListRequest {
     Query query = 1 ;
-    Paginator paginator = 2;
+    Paginate paginate = 2;
 }
