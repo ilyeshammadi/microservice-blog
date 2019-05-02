@@ -1,21 +1,22 @@
 import { Resolver, Query, Args, ResolveProperty, Mutation, Parent } from "@nestjs/graphql";
 import { ID } from "type-graphql";
 import { Article } from "./types/article.type";
-import { ArticleService } from "./articles.service";
-import { Comment } from "src/comments/types/comment.type";
+import { ArticlesService } from "./articles.service";
 import { CommentsService } from "src/comments/comments.service";
 import { Paginate } from "src/common/dto/paginate.input";
 import { CreateArticleInput } from "./dto/create-article.input";
 import { UpdateArticleInput } from "./dto/update-article.input";
-
+import { AuthGuard } from "src/common/guards/auth.guard";
+import { UseGuards, createParamDecorator } from "@nestjs/common";
+import { PaginateArgs } from "src/common/decorators/paginate.decorator";
 
 
 @Resolver(of => Article)
 export class ArticleResolver {
-    constructor(private readonly articleService: ArticleService, private readonly commentsService: CommentsService) { }
+    constructor(private readonly articleService: ArticlesService, private readonly commentsService: CommentsService) { }
 
     @Query(returns => [Article])
-    async articles(@Args({ name: 'paginate', type: () => Paginate, nullable: true }) paginate: Paginate) {
+    async articles(@PaginateArgs() paginate: Paginate) {
         return await this.articleService.list(null, paginate);
     }
 
@@ -25,7 +26,7 @@ export class ArticleResolver {
     }
 
     @ResolveProperty()
-    async comments(@Parent() parent, @Args({ name: 'paginate', type: () => Paginate, nullable: true }) paginate: Paginate) {
+    async comments(@Parent() parent, @PaginateArgs() paginate: Paginate) {
         return await this.commentsService.list({ articleId: parent.id }, paginate);
     }
 
@@ -39,6 +40,7 @@ export class ArticleResolver {
         return this.articleService.update(updateArticleInput)
     }
 
+    @UseGuards(AuthGuard)
     @Mutation(returns => Article, { name: 'deleteArticle' })
     async delete(@Args({ name: 'id', type: () => ID }) id: string) {
         return this.articleService.delete(id)

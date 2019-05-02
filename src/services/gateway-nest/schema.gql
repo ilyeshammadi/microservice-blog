@@ -28,6 +28,15 @@ input CreateCommentInput {
   articleId: ID!
 }
 
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+type LoginResponse {
+  token: String!
+}
+
 type Mutation {
   createArticle(createArticleInput: CreateArticleInput!): Article!
   updateArticle(updateArticleInput: UpdateArticleInput!): Article!
@@ -35,6 +44,7 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   deleteComment(id: ID!): Comment!
+  login(loginInput: LoginInput!): LoginResponse!
 }
 
 input Paginate {
@@ -47,6 +57,8 @@ type Query {
   article(id: ID!): Article!
   comments(paginate: Paginate): [Comment!]!
   comment(id: ID!): Comment!
+  user(id: ID!): User!
+  users(paginate: Paginate): [User!]!
 }
 
 input UpdateArticleInput {
@@ -58,4 +70,11 @@ input UpdateArticleInput {
 input UpdateCommentInput {
   id: ID!
   content: String!
+}
+
+type User {
+  id: ID!
+  username: String!
+  articles(paginate: Paginate): [Article!]
+  comments(paginate: Paginate): [Comment!]
 }

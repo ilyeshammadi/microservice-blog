@@ -5,6 +5,7 @@ import { Comment } from "./types/comment.type";
 import { Paginate } from "src/common/dto/paginate.input";
 import { CreateCommentInput } from "./dto/create-comment.input";
 import { UpdateCommentInput } from "./dto/update-comment.input";
+import { PaginateArgs } from "src/common/decorators/paginate.decorator";
 
 
 @Resolver(of => Comment)
@@ -12,7 +13,7 @@ export class CommentResolver {
     constructor(private readonly commentsService: CommentsService) { }
 
     @Query(returns => [Comment])
-    async comments(@Args({ name: 'paginate', type: () => Paginate, nullable: true }) paginate: Paginate) {
+    async comments(@PaginateArgs() paginate: Paginate) {
         return await this.commentsService.list(null, paginate);
     }
 

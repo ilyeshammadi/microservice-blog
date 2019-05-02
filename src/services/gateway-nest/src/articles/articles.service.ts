@@ -9,7 +9,7 @@ const article = {
 }
 
 @Injectable()
-export class ArticleService {
+export class ArticlesService {
     async list(query, paginate) {
         return [article]
     }
