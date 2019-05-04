@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
+import * as mongoose from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate';
 
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://mongodb.dbs.svc.cluster.local';
+const MONGODB_URL = process.env.MONGODB_URL;
 
 mongoose.connect(`${MONGODB_URL}/users`, { useNewUrlParser: true });
 
@@ -22,6 +22,5 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(mongoosePaginate);
 
-module.exports = {
-    User: mongoose.model('User', UserSchema)
-}
+
+export const User = mongoose.model('User', UserSchema);
