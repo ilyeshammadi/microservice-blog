@@ -1,19 +1,33 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "./types/user.type";
-
-const user = {
-    id: '1234',
-    username: 'ilyes'
-}
+import { Client, ClientGrpc } from "@nestjs/microservices";
+import { usersGrpcClientOptions } from "src/common/options/users-grpc.option";
+import { reduce, map } from "rxjs/operators";
 
 @Injectable()
 export class UsersService {
+    @Client(usersGrpcClientOptions)
+    client: ClientGrpc
 
-    list(query, paginate): User[] {
-        return [user]
+    grpcClient
+
+    onModuleInit() {
+        this.grpcClient = this.client.getService('GrpcService');
     }
 
-    get(id): User {
-        return user;
+    list(query, paginate) {
+        return this.grpcClient.list({ query, paginate })
+            .pipe(reduce((acc, curr) => [curr, ...acc], []));
+    }
+
+    get(id) {
+        return this.grpcClient.get({ id });
+    }
+
+    create(username, password) {
+        return this.grpcClient.create({ username, password })
+            .pipe(
+                map((x: any) => x.user)
+            );
     }
 }

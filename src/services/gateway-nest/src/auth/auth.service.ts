@@ -1,19 +1,23 @@
 import { Injectable } from "@nestjs/common";
-
-const user = {
-    id: '1234',
-    username: 'ilyes'
-}
-
-const token = '12345'
+import { authGrpcClientOptions } from "src/common/options/auth-grpc.option";
+import { ClientGrpc, Client } from "@nestjs/microservices";
 
 @Injectable()
 export class AuthService {
-    async authenticate(token) {
-        return user
+    @Client(authGrpcClientOptions)
+    client: ClientGrpc
+
+    grpcService;
+
+    onModuleInit() {
+        this.grpcService = this.client.getService('GrpcService');
     }
 
-    async login(username, password) {
-        return token;
+    authenticate(token) {
+        return this.grpcService.getUser({ token });
+    }
+
+    login(username, password) {
+        return this.grpcService.login({ username, password });
     }
 }

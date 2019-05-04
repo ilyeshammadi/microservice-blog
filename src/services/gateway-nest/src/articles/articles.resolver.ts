@@ -7,8 +7,11 @@ import { Paginate } from "src/common/dto/paginate.input";
 import { CreateArticleInput } from "./dto/create-article.input";
 import { UpdateArticleInput } from "./dto/update-article.input";
 import { AuthGuard } from "src/common/guards/auth.guard";
-import { UseGuards, createParamDecorator } from "@nestjs/common";
+import { UseGuards } from "@nestjs/common";
 import { PaginateArgs } from "src/common/decorators/paginate.decorator";
+import { HasAccessTo } from "src/common/decorators/has-access-to.decorator";
+import { AuthorizationGuard } from "src/common/guards/authorization.guard";
+import { UserEntity } from "src/common/decorators/user-entity.decorator";
 
 
 @Resolver(of => Article)
@@ -16,33 +19,38 @@ export class ArticleResolver {
     constructor(private readonly articleService: ArticlesService, private readonly commentsService: CommentsService) { }
 
     @Query(returns => [Article])
-    async articles(@PaginateArgs() paginate: Paginate) {
-        return await this.articleService.list(null, paginate);
+    articles(@PaginateArgs() paginate: Paginate) {
+        return this.articleService.list(null, paginate);
     }
 
     @Query(returns => Article)
-    async article(@Args({ name: 'id', type: () => ID }) id: string) {
-        return await this.articleService.get(id);
+    article(@Args({ name: 'id', type: () => ID }) id: string) {
+        return this.articleService.get(id);
     }
 
     @ResolveProperty()
-    async comments(@Parent() parent, @PaginateArgs() paginate: Paginate) {
-        return await this.commentsService.list({ articleId: parent.id }, paginate);
+    comments(@Parent() parent, @PaginateArgs() paginate: Paginate) {
+        return this.commentsService.list({ articleId: parent.id }, paginate);
     }
 
+    @UseGuards(AuthGuard, AuthorizationGuard)
+    @HasAccessTo({ action: "create", subject: "Article" })
     @Mutation(returns => Article, { name: 'createArticle' })
-    async create(@Args('createArticleInput') createArticleInput: CreateArticleInput) {
-        return this.articleService.create(createArticleInput)
+    create(@UserEntity() user, @Args('input') createArticleInput: CreateArticleInput) {
+        return this.articleService.create({ authorId: user.id, ...createArticleInput })
     }
 
+    @UseGuards(AuthGuard, AuthorizationGuard)
+    @HasAccessTo({ action: "update", subject: "Article", instance: true })
     @Mutation(returns => Article, { name: 'updateArticle' })
-    async update(@Args('updateArticleInput') updateArticleInput: UpdateArticleInput) {
-        return this.articleService.update(updateArticleInput)
+    update(@UserEntity() user, @Args('input') updateArticleInput: UpdateArticleInput) {
+        return this.articleService.update({ authorId: user.id, ...updateArticleInput })
     }
 
-    @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard, AuthorizationGuard)
+    @HasAccessTo({ action: "delete", subject: "Article", instance: true })
     @Mutation(returns => Article, { name: 'deleteArticle' })
-    async delete(@Args({ name: 'id', type: () => ID }) id: string) {
+    delete(@Args({ name: 'id', type: () => ID }) id: string) {
         return this.articleService.delete(id)
     }
 

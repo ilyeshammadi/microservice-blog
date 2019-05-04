@@ -1,32 +1,47 @@
 import { Injectable } from "@nestjs/common";
+import { Client, Transport, ClientGrpc, ClientOptions } from '@nestjs/microservices'
 import { Article } from "./types/article.type";
-
-const article = {
-    id: "345",
-    title: "foo",
-    content: "ddd",
-    authorId: "1234"
-}
+import { reduce, map } from 'rxjs/operators';
+import { articlesGrpcClientOptions } from "src/common/options/articles-grpc.option";
 
 @Injectable()
 export class ArticlesService {
+    @Client(articlesGrpcClientOptions)
+    client: ClientGrpc;
+
+    grpcClient
+
+    onModuleInit() {
+        this.grpcClient = this.client.getService('GrpcService');
+    }
+
     async list(query, paginate) {
-        return [article]
+        return this.grpcClient.list({ query, paginate })
+            .pipe(reduce((acc, curr) => [curr, ...acc], []))
     }
 
     async get(id: string) {
-        return article;
+        return this.grpcClient.get({ id });
     }
 
     async create(createParams) {
-        return article
+        return this.grpcClient.create(createParams)
+            .pipe(
+                map((x: any) => x.article)
+            );
     }
 
     async update(updateParams) {
-        return article
+        return this.grpcClient.update(updateParams)
+            .pipe(
+                map((x: any) => x.article)
+            );
     }
 
-    async delete(deleteParams) {
-        return article
+    async delete(id) {
+        return this.grpcClient.remove({ id })
+            .pipe(
+                map((x: any) => x.article)
+            );
     }
 }

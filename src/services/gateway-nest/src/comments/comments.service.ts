@@ -1,33 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { Comment } from './types/comment.type';
-
-const comment = {
-    id: "1234",
-    content: "wooow",
-    articleId: "345",
-    authorId: "1234"
-}
+import { commentsGrpcClientOptions } from 'src/common/options/comments-grpc.option';
+import { ClientGrpc, Client, GrpcService } from '@nestjs/microservices';
+import { map, reduce } from 'rxjs/operators';
 
 @Injectable()
 export class CommentsService {
-    list(query, paginate): Comment[] {
-        return [comment]
+    @Client(commentsGrpcClientOptions)
+    client: ClientGrpc
+
+    grpcService;
+
+    onModuleInit() {
+        this.grpcService = this.client.getService('GrpcService');
+    }
+    async list(query, paginate) {
+        return this.grpcService.list({ query, paginate })
+            .pipe(reduce((acc, curr) => [curr, ...acc], []))
     }
 
-    get(id: string): Comment {
-        return comment;
+    async get(id: string) {
+        return this.grpcService.get({ id });
     }
 
     async create(createParams) {
-        return comment
+        return this.grpcService.create({ authorId: '12345567', ...createParams })
+            .pipe(
+                map((x: any) => x.comment)
+            );
     }
 
     async update(updateParams) {
-        return comment
+        return this.grpcService.update({ authorId: '12345567', ...updateParams })
+            .pipe(
+                map((x: any) => x.comment)
+            );
     }
 
-    async delete(deleteParams) {
-        return comment
+    async delete(id) {
+        return this.grpcService.remove({ authorId: '12345567', id })
+            .pipe(
+                map((x: any) => x.comment)
+            );
     }
 
 }

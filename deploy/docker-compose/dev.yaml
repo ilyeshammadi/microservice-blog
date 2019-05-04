@@ -28,6 +28,28 @@ services:
       - users
       - redis
 
+  gateway-nest:
+    build:
+      context: ../../src
+      dockerfile: services/gateway-nest/Dockerfile.dev
+      args:
+        SERVICE: gateway-nest
+    restart: always
+    volumes:
+      - ../../src/common:/src/services/gateway-nest/common
+      - ../../src/services/gateway-nest/src:/src/services/gateway-nest/src
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URL=mongodb://mongo
+      - AMQP_URL=amqp://rabbitmq
+      - REDIS_URL=redis://redis
+    depends_on:
+      - auth
+      - articles
+      - users
+      - redis
+
   auth:
     build:
       context: ../../src
