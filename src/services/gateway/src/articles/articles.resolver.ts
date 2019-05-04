@@ -11,7 +11,7 @@ import { UseGuards } from "@nestjs/common";
 import { PaginateArgs } from "src/common/decorators/paginate.decorator";
 import { HasAccessTo } from "src/common/decorators/has-access-to.decorator";
 import { AuthorizationGuard } from "src/common/guards/authorization.guard";
-import { UserEntity } from "src/common/decorators/user-entity.decorator";
+import { User } from "src/common/decorators/user.decorator";
 
 
 @Resolver(of => Article)
@@ -36,14 +36,14 @@ export class ArticleResolver {
     @UseGuards(AuthGuard, AuthorizationGuard)
     @HasAccessTo({ action: "create", subject: "Article" })
     @Mutation(returns => Article, { name: 'createArticle' })
-    create(@UserEntity() user, @Args('input') createArticleInput: CreateArticleInput) {
+    create(@User() user, @Args('input') createArticleInput: CreateArticleInput) {
         return this.articleService.create({ authorId: user.id, ...createArticleInput })
     }
 
     @UseGuards(AuthGuard, AuthorizationGuard)
     @HasAccessTo({ action: "update", subject: "Article", instance: true })
     @Mutation(returns => Article, { name: 'updateArticle' })
-    update(@UserEntity() user, @Args('input') updateArticleInput: UpdateArticleInput) {
+    update(@User() user, @Args('input') updateArticleInput: UpdateArticleInput) {
         return this.articleService.update({ authorId: user.id, ...updateArticleInput })
     }
 

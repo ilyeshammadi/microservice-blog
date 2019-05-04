@@ -24,21 +24,21 @@ export class CommentsService {
     }
 
     async create(createParams) {
-        return this.grpcService.create({ authorId: '12345567', ...createParams })
+        return this.grpcService.create(createParams)
             .pipe(
                 map((x: any) => x.comment)
             );
     }
 
     async update(updateParams) {
-        return this.grpcService.update({ authorId: '12345567', ...updateParams })
+        return this.grpcService.update(updateParams)
             .pipe(
                 map((x: any) => x.comment)
             );
     }
 
     async delete(id) {
-        return this.grpcService.remove({ authorId: '12345567', id })
+        return this.grpcService.remove({ id })
             .pipe(
                 map((x: any) => x.comment)
             );

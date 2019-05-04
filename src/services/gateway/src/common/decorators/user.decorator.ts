@@ -1,5 +1,5 @@
 import { createParamDecorator } from "@nestjs/common";
 
-export const UserEntity = createParamDecorator(
+export const User = createParamDecorator(
     (data, [root, args, ctx, info]) => ctx.user,
 );
