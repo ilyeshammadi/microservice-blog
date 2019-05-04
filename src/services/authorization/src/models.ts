@@ -31,7 +31,7 @@ RoleSchema.plugin(mongoosePaginate);
 
 export const Role = model('Role', RoleSchema)
 
-Role.newUserRole = async userId => {
+export async function newUserRole(userId) {
     return await new Role({
         userId,
         type: constants.ROLE_TYPES.user.name,
@@ -39,7 +39,7 @@ Role.newUserRole = async userId => {
     }).save()
 }
 
-Role.newAdminRole = async userId => {
+export async function newAdminRole(userId) {
     return await new Role({
         userId,
         type: constants.ROLE_TYPES.admin.name,

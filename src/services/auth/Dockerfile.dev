@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:10-alpine
 WORKDIR /src
 ARG SERVICE
 ENV NODE_ENV=development
@@ -8,5 +8,6 @@ RUN npm install --prefix services/$SERVICE
 COPY common ./services/$SERVICE/common
 COPY services/$SERVICE/ ./services/$SERVICE/
 WORKDIR /src/services/$SERVICE
+CMD [ "npm", "run" ,"start:dev" ]
+EXPOSE 3000
 EXPOSE 50050
-CMD [ "npm", "run" ,"start" ]
