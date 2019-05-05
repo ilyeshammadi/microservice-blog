@@ -96,11 +96,12 @@ services:
     volumes:
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
-    ports:
-      - "50054:50050"
+    # ports:
+      # - "50054:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
       - AMQP_URL=amqp://rabbitmq
+      - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
       - rabbitmq
@@ -121,6 +122,7 @@ services:
     environment:
       - MONGODB_URL=mongodb://mongo
       - AMQP_URL=amqp://rabbitmq
+      - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
 
@@ -138,3 +140,6 @@ services:
 
   redis:
     image: redis
+
+  nats:
+    image: nats

@@ -1,6 +1,5 @@
 import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { connect, connection } from 'mongoose';
-import * as broker from '../common/js/tools/broker.tool';
 
 @Controller()
 export default class HealthCheckController {
@@ -21,13 +20,6 @@ export default class HealthCheckController {
         { useNewUrlParser: true },
       );
       connection.close();
-    } catch (error) {
-      throw exception;
-    }
-
-    try {
-      // check rabbitmq
-      await broker.checkConnection();
     } catch (error) {
       throw exception;
     }

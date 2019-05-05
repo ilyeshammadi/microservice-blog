@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { emitEvent, events, logger } from '../common/js/tools';
+import { events, logger } from '../common/js/tools';
 import { Article } from './interfaces/article.interface';
 import { Article as ArticleModel } from './app.models';
 import { ListDto } from './dto/list.dto';
@@ -7,9 +7,19 @@ import { GetDto } from './dto/get.dto';
 import { CreateDto } from './dto/create.dto';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
+import { natsClientOptions } from './options/nats-client.option';
+import { Client, ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class Service {
+  @Client(natsClientOptions)
+  client: ClientProxy
+
+
+  async onModuleInit() {
+    await this.client.connect();
+  }
+
   async list({ query, paginate }: ListDto): Promise<Article[]> {
     try {
       // Get the list of articles
@@ -88,7 +98,8 @@ export class Service {
       article.remove();
 
       // Publish the event
-      emitEvent(events.ARTICLE_DELETED, { id });
+      await this.client.emit(events.ARTICLE_DELETED, { id }).toPromise();
+
       return {
         article,
         ok: true,
