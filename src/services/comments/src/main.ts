@@ -1,7 +1,7 @@
 require('dotenv').config();
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './module';
+import { AppModule } from './app.module';
 import { grpcServerOptions } from './options/grpc-server.option';
 import { natsServerOptions } from './options/nats-server.option';
 

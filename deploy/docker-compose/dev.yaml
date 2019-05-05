@@ -20,7 +20,6 @@ services:
       - "3000:3000"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
       - REDIS_URL=redis://redis
     depends_on:
       - auth
@@ -42,7 +41,6 @@ services:
       - "50050:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - users
       - mongo
@@ -61,7 +59,6 @@ services:
       - "50051:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
       - users
@@ -82,7 +79,6 @@ services:
       - "50052:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
     depends_on:
       - mongo
 
@@ -96,15 +92,14 @@ services:
     volumes:
       - ../../src/common:/src/services/comments/common
       - ../../src/services/comments/src:/src/services/comments/src
-    # ports:
-      # - "50054:50050"
+    ports:
+      - "50054:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
       - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
-      - rabbitmq
+      - nats
 
   articles:
     build:
@@ -121,7 +116,6 @@ services:
       - "50056:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
-      - AMQP_URL=amqp://rabbitmq
       - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
@@ -132,11 +126,6 @@ services:
       - mongodb:/data/db
     ports:
       - "27017:27017"
-
-  rabbitmq:
-    image: rabbitmq
-    ports:
-      - "5672:5672"
 
   redis:
     image: redis
