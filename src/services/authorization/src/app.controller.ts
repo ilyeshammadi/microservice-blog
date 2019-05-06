@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, MessagePattern } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
 @Controller()
@@ -23,6 +23,11 @@ export class GrpcService {
 
   @GrpcMethod()
   async createRole(request) {
+    return await this.appService.createRole(request);
+  }
+
+  @MessagePattern({ cmd: 'createRole' })
+  async asyncCreateRole(request) {
     return await this.appService.createRole(request);
   }
 }

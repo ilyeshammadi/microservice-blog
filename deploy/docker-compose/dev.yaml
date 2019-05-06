@@ -21,6 +21,7 @@ services:
     environment:
       - MONGODB_URL=mongodb://mongo
       - REDIS_URL=redis://redis
+      - NATS_URL=nats://nats:4222
     depends_on:
       - auth
       - articles
@@ -41,6 +42,7 @@ services:
       - "50050:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
+      - NATS_URL=nats://nats:4222
     depends_on:
       - users
       - mongo
@@ -59,6 +61,7 @@ services:
       - "50051:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
+      - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
       - users
@@ -79,6 +82,7 @@ services:
       - "50052:50050"
     environment:
       - MONGODB_URL=mongodb://mongo
+      - NATS_URL=nats://nats:4222
     depends_on:
       - mongo
 

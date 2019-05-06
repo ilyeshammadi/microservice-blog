@@ -1,22 +1,12 @@
 require('dotenv').config();
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ClientOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
 import { AppModule } from './app.module';
-
-const grpcOptions: ClientOptions = {
-  transport: Transport.GRPC,
-  options: {
-    package: 'service',
-    url: '0.0.0.0:50050',
-    protoPath: join(__dirname, '../common/proto/users/service.proto'),
-  },
-};
+import { authGrpcServerOptions } from './options/users-grpc-server.option';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.connectMicroservice(grpcOptions);
+  app.connectMicroservice(authGrpcServerOptions);
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

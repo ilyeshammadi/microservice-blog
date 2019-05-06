@@ -39,6 +39,7 @@ export class Service {
   }
 
   async get({ id }: GetDto): Promise<Article> {
+    await this.client.emit(events.ARTICLE_DELETED, { id: "1234" }).toPromise();
     try {
       // Get one article
       const article = await ArticleModel.findOne({ _id: id });

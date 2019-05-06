@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { logger, grpcClients } from '../common/js/tools';
+import { logger } from '../common/js/tools';
 import { User } from './users.model';
 import { CreateDto } from './dto/create.dto';
 import { ListDto } from './dto/list.dto';
 import { GetDto } from './dto/get.dto';
+import { Client, ClientGrpc, ClientProxy } from '@nestjs/microservices';
+import { natsClientOption } from './options/nats-client.option';
 
-const authorization = grpcClients.authorization;
 
 @Injectable()
 export class AppService {
+  @Client(natsClientOption)
+  client: ClientProxy
+
+  async onModuleInit() {
+    await this.client.connect();
+  }
+
   async list({ query, paginate }: ListDto): Promise<any[]> {
     try {
       const { docs } = await User.paginate(query, paginate);
@@ -50,12 +58,7 @@ export class AppService {
       // Create the user role, if error delete the user
       try {
         const createRoleRequest = { userId: user.id, type: "user" };
-        await new Promise((resolve, reject) => {
-          authorization.createRole(createRoleRequest, (err, res) => {
-            if (err) reject(err);
-            resolve(res);
-          });
-        });
+        await this.client.send({ cmd: 'createRole' }, createRoleRequest).toPromise();
       } catch (error) {
         // If error, delete the created user
         await User.deleteOne({ id: user.id });

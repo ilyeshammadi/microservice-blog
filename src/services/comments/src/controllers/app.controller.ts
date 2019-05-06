@@ -2,7 +2,7 @@ import { Controller, UseInterceptors } from '@nestjs/common';
 import { GrpcMethod, EventPattern } from '@nestjs/microservices';
 import { from } from 'rxjs';
 import { Service } from '../app.service';
-import { GrpcLoggingInterceptor } from '../logging.interceptor';
+import { GrpcLoggingInterceptor } from '../interceptors/grpc-logging.interceptor';
 
 @UseInterceptors(GrpcLoggingInterceptor)
 @Controller()

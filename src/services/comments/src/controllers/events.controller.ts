@@ -10,6 +10,6 @@ export class EventsController {
     @EventPattern(events.ARTICLE_DELETED)
     async handleArticleDeleted(data: Record<string, unknown>) {
         const { id } = data;
-        await this.service.removeMany({ articleId: id })
+        return await this.service.removeMany({ articleId: id })
     }
 }
