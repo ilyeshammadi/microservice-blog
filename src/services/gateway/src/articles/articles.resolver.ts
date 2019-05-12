@@ -12,11 +12,12 @@ import { PaginateArgs } from "src/common/decorators/paginate.decorator";
 import { HasAccessTo } from "src/common/decorators/has-access-to.decorator";
 import { AuthorizationGuard } from "src/common/guards/authorization.guard";
 import { User } from "src/common/decorators/user.decorator";
+import { UsersService } from "src/users/users.service";
 
 
 @Resolver(of => Article)
 export class ArticleResolver {
-    constructor(private readonly articleService: ArticlesService, private readonly commentsService: CommentsService) { }
+    constructor(private readonly articleService: ArticlesService, private readonly commentsService: CommentsService, private readonly usersService: UsersService) { }
 
     @Query(returns => [Article])
     articles(@PaginateArgs() paginate: Paginate) {
@@ -26,6 +27,11 @@ export class ArticleResolver {
     @Query(returns => Article)
     article(@Args({ name: 'id', type: () => ID }) id: string) {
         return this.articleService.get(id);
+    }
+
+    @ResolveProperty()
+    author(@Parent() parent) {
+        return this.usersService.get(parent.authorId);
     }
 
     @ResolveProperty()
